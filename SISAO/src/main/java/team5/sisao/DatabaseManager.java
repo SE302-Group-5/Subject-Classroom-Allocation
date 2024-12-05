@@ -106,6 +106,7 @@ public class DatabaseManager {
 
             createStudentsTable(allStudentsArray); // creates the Students table that stores every student in school
 
+            System.out.println("Created Students Table");
 
             for (int i = 0; i < allStudentsArray.length; i++) {    // fills in the schedules of students
                 Schedule schedule = new Schedule();
@@ -126,11 +127,13 @@ public class DatabaseManager {
                 }
                 schedule = new Schedule(weeklyProgram);
                 createScheduleTable(student, schedule);
+                System.out.println("Created Schedule Table of: " + student);
             }
 
 
             for (Course course : courses) {
                 createEnrollmentTable(course);   // creating the enrollment tables for every course
+                System.out.println("Created enrollment table for: " + course.getCourseName());
             }
 
             // ClassroomCapacity CVS File
@@ -169,9 +172,13 @@ public class DatabaseManager {
             for (Classroom classroom : classrooms) {
 
                 createScheduleTable(classroom.getClassroomName(), schedule); // creates empty schedule tables in database for classrooms
+
+                System.out.println("Created Schedule Table of: " + classroom.getClassroomName());
             }
 
             createClassroomsTable(classrooms);
+
+            System.out.println("Created Classrooms Table");
             classrooms.sort(Comparator.comparing(Classroom::getCapacity)); // sorts the classrooms by increasing capacity order
 
 
@@ -187,12 +194,15 @@ public class DatabaseManager {
                     if (isAvailable(classroom.getClassroomName(), day, startHour, duration) && capacity >= enrollment) {
                         updateSchedule(classroom.getClassroomName(), course.getCourseName(), day, startHour, duration);
                         course.setClassroom(classroom.getClassroomName());
+                        System.out.println("Assigned " + classroom.getClassroomName()+" with size "+capacity+ " to " + course.getCourseName()+ " with size "+enrollment);
                         //    System.out.println(classroom.getClassroomName() +" "+classroom.getCapacity() +"    " + course.getCourseName()+" "+getEnrollmentCount(course.getCourseName()));
                         break;
                     }
                 }
             }
             createCoursesTable(courses); // creates the Courses table that stores every courses info
+
+            System.out.println("Created Courses Table");
         }
 
     }
@@ -478,6 +488,7 @@ public class DatabaseManager {
 
         return students;
     }
+
     public Schedule getCommonFreeHours(ArrayList<String> students) {
         Schedule freeHours = new Schedule();
         String studentCompare = students.getFirst();
