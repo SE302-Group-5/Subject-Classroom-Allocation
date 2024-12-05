@@ -31,7 +31,7 @@ public class DatabaseManager {
             System.out.println("db already exists, connected to db\n\n");
             this.dbExists = true;
         } catch (FileNotFoundException e) {
-         //   System.out.println("Created new database\n\n");
+            //   System.out.println("Created new database\n\n");
             dbExists = false;
         }
 
@@ -441,15 +441,15 @@ public class DatabaseManager {
 
     }
 
+
     public int getEnrollmentCount(String courseName) {
         int retVal = 0;
 
-        var stmt = "SELECT COUNT(*) enrollment FROM " + courseName;
+        var sql = "SELECT COUNT(*) enrollmentCount FROM " + courseName;
         try {
-            PreparedStatement select = databaseConnection.
-                    prepareStatement(stmt);
-            ResultSet resultSet = select.executeQuery();
-            retVal = resultSet.getInt("enrollment");
+            var stmt = databaseConnection.createStatement();
+            var rs = stmt.executeQuery(sql);
+            retVal = rs.getInt("enrollmentCount");
         } catch (SQLException e) {
             //    e.printStackTrace();
             System.err.println("Error with getting the attendance of: " + courseName);
@@ -460,3 +460,5 @@ public class DatabaseManager {
 
 
 }
+
+
