@@ -458,6 +458,27 @@ public class DatabaseManager {
         return retVal;
     }
 
+    public ArrayList<String> getEnrollment(String courseName) {
+        ArrayList<String> students = new ArrayList<>();
+        var sql = "SELECT student FROM " + courseName;
+
+        try {
+            var stmt = databaseConnection.createStatement();
+            var rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                students.add(rs.getString(1));
+            }
+
+        } catch (SQLException e) {
+            //    e.printStackTrace();
+            System.err.println("Error with getting the attendance of: " + courseName);
+        }
+
+
+        return students;
+    }
+
 
 }
 
