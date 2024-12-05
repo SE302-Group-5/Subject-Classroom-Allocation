@@ -478,6 +478,28 @@ public class DatabaseManager {
 
         return students;
     }
+    public Schedule getCommonFreeHours(ArrayList<String> students) {
+        Schedule freeHours = new Schedule();
+        String studentCompare = students.getFirst();
+        for (int i = 1; i < students.size(); i++) {
+
+            String student = students.get(i);
+            for (int day = 0; day < 7; day++) {
+                for (int hour = 0; hour < 16; hour++) {
+                    if (isAvailable(studentCompare, day, hour, 1) && isAvailable(student, day, hour, 1)) {
+                        freeHours.updateSchedule(freeHours, day, hour, "Y");
+                    } else {
+                        freeHours.updateSchedule(freeHours, day, hour, "N");
+                    }
+                }
+            }
+
+
+        }
+
+
+        return freeHours;
+    }
 
 
 }
