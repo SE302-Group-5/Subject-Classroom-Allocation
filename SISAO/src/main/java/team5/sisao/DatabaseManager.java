@@ -22,7 +22,7 @@ public class DatabaseManager {
 
     public static Connection databaseConnection;
     private boolean dbExists;
-
+// TRY OUT COMMAND 
     public DatabaseManager() {
 
 
