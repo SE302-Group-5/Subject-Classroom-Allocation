@@ -511,6 +511,25 @@ public class DatabaseManager {
 
         return freeHours;
     }
+    public ArrayList<Classroom> getClassrooms() {
+        ArrayList<Classroom> classrooms = new ArrayList<>();
+        var sql = "SELECT classroomName, capacity FROM Classrooms";
+
+        try {
+            var stmt = databaseConnection.createStatement();
+            var rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                classrooms.add(new Classroom(rs.getString("classroomName"), rs.getString("capacity")));
+            }
+
+        } catch (SQLException e) {
+            //    e.printStackTrace();
+            System.err.println("Error with getting the classrooms");
+        }
+        return classrooms;
+
+    }
 
 
 }
