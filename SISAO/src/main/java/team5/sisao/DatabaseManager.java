@@ -569,6 +569,57 @@ public class DatabaseManager {
         return courses;
     }
 
+    public void addCourse(Course course) {
+        // Validate the input
+        if (course == null) {
+            System.out.println("Cannot add a null course.");
+            return;
+        }
+
+        // Initialize the SQL command using StringBuilder
+        StringBuilder command = new StringBuilder();
+
+        // Construct the SQL command
+        command.append("INSERT INTO Courses (")
+                .append("courseName, courseDay, courseTime, duration, lecturer, classroom")
+                .append(") VALUES (")
+                .append("'").append(course.getCourseName()).append("', ")
+                .append(course.getDay()).append(", ")
+                .append(course.getStartHour()).append(", ")
+                .append(course.getDuration()).append(", ")
+                .append("'").append(course.getLecturer()).append("', ")
+                .append(course.getClassroom() == null ? "NULL" : "'" + course.getClassroom() + "'")
+                .append(");");
+
+
+        // Print the SQL command for debugging purposes
+        System.out.println("Generated SQL Command: " + command.toString());
+
+        // Execute the SQL command
+        try {
+            // Create a Statement object
+            var stmt = databaseConnection.createStatement();
+
+            // Execute the update (INSERT statement)
+            stmt.executeUpdate(command.toString());
+
+            // Close the statement
+            stmt.close();
+
+            System.out.println("Course added successfully.");
+        } catch (SQLException e) {
+            System.err.printf("Error while adding the course: %s%n", e.getMessage());
+            e.printStackTrace();
+        }
+       /* Kaydolan sınıfla öğrencilerin schedule tabloları güncellenecek
+        Course' un enrollment tablosu oluşturulacak */
+    }
+
+
+
+
+
+
 
 }
 

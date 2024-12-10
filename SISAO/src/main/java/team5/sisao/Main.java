@@ -42,6 +42,10 @@ public class Main extends Application {
         DatabaseManager db = new DatabaseManager();
         db.boot();
         System.out.println("DB connection established");
+        Course ege = new Course("MathForEge",4,5,2,"EgeAkin","M1000");
+
+        System.out.println("An example course is created for testing purposes ");
+        db.addCourse(ege);
         launch(args);
     }
 }
