@@ -530,6 +530,44 @@ public class DatabaseManager {
         return classrooms;
 
     }
+	
+	public ArrayList<Course> getCourses() {
+        System.out.println("Inside the getCourses method");
+        ArrayList<Course> courses = new ArrayList<>();
+        String sql = "SELECT * FROM Courses";
+
+        try {
+            var stmt = databaseConnection.createStatement();
+            var rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                // Extract course data from ResultSet
+                String courseName = rs.getString("courseName"); // Column 1
+                String day = rs.getString("courseDay");        // Column 2
+                String startHour = rs.getString("courseTime"); // Column 3
+                String duration = rs.getString("duration");    // Column 4
+                String lecturer = rs.getString("lecturer");    // Column 5
+                String classroom = rs.getString("classroom"); // column 6
+
+
+
+                
+
+
+                // Create and add the Course object to the list
+                Course temp = new Course(courseName, Integer.parseInt(day),Integer.parseInt(startHour), Integer.parseInt(duration), lecturer,classroom);
+                courses.add(temp);
+            }
+        } catch (SQLException e) {
+
+            System.err.println("Error occurred while fetching courses: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            System.out.println("Operation completed successfully");
+        }
+
+        return courses;
+    }
 
 
 }

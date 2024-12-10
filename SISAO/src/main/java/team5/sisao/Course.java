@@ -23,6 +23,16 @@ public class Course {
         this.duration = Integer.parseInt(duration);
         this.attandees = attandees;
     }
+	
+	public Course(String courseName, int courseDay, int courseTime, int duration,String lecturer,String classroom) {
+        this.courseName = courseName;
+        this.day = courseDay;
+        this.startHour = courseTime;
+        this.duration = duration;
+        this.lecturer = lecturer;
+        this.classroom = classroom;
+
+    }
 
     public void addClassroom() {
     }
