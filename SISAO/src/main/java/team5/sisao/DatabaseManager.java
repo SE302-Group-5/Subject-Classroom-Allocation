@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class DatabaseManager {
 
@@ -615,12 +616,49 @@ public class DatabaseManager {
         Course' un enrollment tablosu oluşturulacak */
     }
 
+    public Schedule getSchedule(String schedule) {
+        Schedule retrievedSchedule = new Schedule();
 
+        try {
+            String sql = "SELECT * FROM " + schedule;
+            Statement stmt = databaseConnection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int day = rs.getInt("day");
+                for (int hour = 0; hour < 16; hour++) {
+                    String courseAtTime = rs.getString("hour" + hour);
+                    if (courseAtTime != null) {
+                        retrievedSchedule.getWeeklyProgram()[day][hour] = courseAtTime;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error while retrieving the schedule for: " + schedule);
+        }
 
+        return retrievedSchedule;
+    }
 
+    public List<String> getStudents() {
+        List<String> students = new ArrayList<>();
 
+        try {
+            String sql = "SELECT * FROM Students";
+            Statement stmt = databaseConnection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
 
+            while (rs.next()) {
+                String studentName = rs.getString("student_name");
+                if (studentName != null) {
+                    students.add(studentName);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Failed to fetch students from the database.");
+        }
 
+        return students;
+    }
 }
-
-
