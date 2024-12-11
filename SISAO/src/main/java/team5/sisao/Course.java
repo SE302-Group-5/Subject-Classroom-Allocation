@@ -106,6 +106,25 @@ public class Course {
     public int getDay() {
         return day;
     }
+    public String getDayString() {
+        String retval = "";
+        if (day == 0) {
+            retval = "Monday";
+        } else if (day == 1) {
+            retval = "Tuesday";
+        } else if (day == 2) {
+            retval = "Wednesday";
+        } else if (day == 3) {
+            retval = "Thursday";
+        } else if (day == 4) {
+            retval = "Friday";
+        } else if (day == 5) {
+            retval = "Saturday";
+        } else {
+            retval = "Sunday";
+        }
+        return retval;
+    }
 
     public String getClassroom() {
         return classroom;

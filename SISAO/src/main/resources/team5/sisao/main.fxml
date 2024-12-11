@@ -3,28 +3,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team5.sisao.MainController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team5.sisao.MainController">
     <VBox>
-        <HBox alignment="CENTER" maxWidth="Infinity" prefHeight="80.0" prefWidth="149.0" style="-fx-background-color: #D3D3D3; -fx-padding: 10;">
-            <ImageView fitHeight="50.0" fitWidth="52.0" preserveRatio="true">
-                <Image url="@/team5/sisao/images/logo.png"/>
-            </ImageView>
-            <Label alignment="BASELINE_CENTER" prefHeight="35.0" prefWidth="124.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="SISAO " />
+        <HBox alignment="CENTER" maxWidth="Infinity" prefHeight="80.0" prefWidth="1000.0" style="-fx-background-color: #D3D3D3; -fx-padding: 10;">
+
+                <ImageView fx:id="logo" fitHeight="60.0" fitWidth="60.0" />
+
+            <Label alignment="BASELINE_CENTER" prefHeight="50.0" prefWidth="124.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="SISAO ">
+            <font>
+               <Font size="96.0" />
+            </font></Label>
         </HBox>
 
         <!-- Main HBox to hold both button sections -->
         <HBox prefHeight="421.0" prefWidth="800.0">
-
+            
             <!-- VBox for Action Buttons (Left Section) -->
-            <VBox prefHeight="444.0" prefWidth="200.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
+            <VBox prefHeight="483.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
             <Accordion>
               <panes>
                   <TitledPane animated="false" text="View">
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                          <Button fx:id="btnViewClassrooms" layoutX="14.0" layoutY="14.0" onAction="#ViewClassrooms" prefHeight="25.0" prefWidth="150.0" text="Classrooms" />
-                          <Button fx:id="btnViewStudents" layoutX="14.0" layoutY="50.0" onAction="#ViewStudents" prefHeight="25.0" prefWidth="150.0" text="Students" />
-                          <Button fx:id="btnViewCourses" layoutX="14.0" layoutY="82.0" onAction="#ViewCourses" prefHeight="25.0" prefWidth="150.0" text="Courses" />
+                          <Button fx:id="btnViewClassrooms" layoutX="4.0" layoutY="14.0" onAction="#ViewClassrooms" prefHeight="25.0" prefWidth="150.0" text="Classrooms" />
+                          <Button fx:id="btnViewStudents" layoutX="4.0" layoutY="47.0" onAction="#ViewStudents" prefHeight="25.0" prefWidth="150.0" text="Students" />
+                          <Button fx:id="btnViewCourses" layoutX="4.0" layoutY="78.0" onAction="#ViewCourses" prefHeight="25.0" prefWidth="150.0" text="Courses" />
                       </AnchorPane>
                   </TitledPane>
                   <TitledPane animated="false" text="Add">
@@ -38,7 +42,25 @@
                   </TitledPane>
               </panes>
             </Accordion>
+
                 <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help" />
+            </VBox>
+            <VBox prefHeight="595.0" prefWidth="800.0">
+                <TextArea fx:id="textAreaCourses" disable="true" editable="false" prefHeight="38.0" prefWidth="621.0" visible="false" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font></TextArea>
+                <TableView fx:id="tableViewCourses" layoutX="100" layoutY="100" prefHeight="400" prefWidth="600" visible="false">
+                    <columns>
+                        <TableColumn fx:id="columnCourseName" prefWidth="150" text="Course Name" />
+                        <TableColumn fx:id="columnStartHour" prefWidth="100" text="Start Hour" />
+                        <TableColumn fx:id="columnDuration" prefWidth="100" text="Duration" />
+                        <TableColumn fx:id="columnLecturer" prefWidth="150" text="Lecturer" />
+                        <TableColumn fx:id="columnDay" prefWidth="100" text="Day" />
+                        <TableColumn fx:id="columnClassroom" prefWidth="100" text="Classroom" />
+                        <TableColumn fx:id="columnAttendees" prefWidth="100" text="Attendees" />
+                    </columns>
+                </TableView>
             </VBox>
 
 
