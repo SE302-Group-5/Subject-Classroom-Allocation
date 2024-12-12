@@ -23,7 +23,8 @@ public class DatabaseManager {
 
     public static Connection databaseConnection;
     private boolean dbExists;
-// TRY OUT COMMAND 
+
+    // TRY OUT COMMAND
     public DatabaseManager() {
 
 
@@ -195,7 +196,7 @@ public class DatabaseManager {
                     if (isAvailable(classroom.getClassroomName(), day, startHour, duration) && capacity >= enrollment) {
                         updateSchedule(classroom.getClassroomName(), course.getCourseName(), day, startHour, duration);
                         course.setClassroom(classroom.getClassroomName());
-                        System.out.println("Assigned " + classroom.getClassroomName()+" with size "+capacity+ " to " + course.getCourseName()+ " with size "+enrollment);
+                        System.out.println("Assigned " + classroom.getClassroomName() + " with size " + capacity + " to " + course.getCourseName() + " with size " + enrollment);
                         //    System.out.println(classroom.getClassroomName() +" "+classroom.getCapacity() +"    " + course.getCourseName()+" "+getEnrollmentCount(course.getCourseName()));
                         break;
                     }
@@ -240,7 +241,7 @@ public class DatabaseManager {
     public void createEnrollmentTable(Course course) {
         String courseName = course.getCourseName();
         ArrayList<String> attandees = course.getAttandees();
-
+        courseName.replaceAll(" ", "_");
         String createEnrollmentTable = "CREATE TABLE IF NOT EXISTS " + courseName + " (" +
                 "student text);";
         try {
@@ -512,6 +513,7 @@ public class DatabaseManager {
 
         return freeHours;
     }
+
     public ArrayList<Classroom> getClassrooms() {
         ArrayList<Classroom> classrooms = new ArrayList<>();
         var sql = "SELECT classroomName, capacity FROM Classrooms";
@@ -531,8 +533,8 @@ public class DatabaseManager {
         return classrooms;
 
     }
-	
-	public ArrayList<Course> getCourses() {
+
+    public ArrayList<Course> getCourses() {
         System.out.println("Inside the getCourses method");
         ArrayList<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM Courses";
@@ -551,12 +553,8 @@ public class DatabaseManager {
                 String classroom = rs.getString("classroom"); // column 6
 
 
-
-                
-
-
                 // Create and add the Course object to the list
-                Course temp = new Course(courseName, Integer.parseInt(day),Integer.parseInt(startHour), Integer.parseInt(duration), lecturer,classroom);
+                Course temp = new Course(courseName, Integer.parseInt(day), Integer.parseInt(startHour), Integer.parseInt(duration), lecturer, classroom);
                 courses.add(temp);
             }
         } catch (SQLException e) {
@@ -569,6 +567,7 @@ public class DatabaseManager {
 
         return courses;
     }
+
 
     public void addCourse(Course course) {
         // Validate the input
@@ -612,9 +611,12 @@ public class DatabaseManager {
             System.err.printf("Error while adding the course: %s%n", e.getMessage());
             e.printStackTrace();
         }
-       /* Kaydolan sınıfla öğrencilerin schedule tabloları güncellenecek
-        Course' un enrollment tablosu oluşturulacak */
+
+
+        // update the schedule for each attendee.
+
     }
+
 
     public Schedule getSchedule(String schedule) {
         Schedule retrievedSchedule = new Schedule();

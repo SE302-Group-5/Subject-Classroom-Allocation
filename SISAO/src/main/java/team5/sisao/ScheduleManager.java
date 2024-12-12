@@ -42,29 +42,7 @@ public class ScheduleManager {
     }
 
 
-    public void updateSchedule(String name, String course, int day, int startHour, int duration) {
 
-        StringBuilder query = new StringBuilder("UPDATE " + name + " SET day =?");
-        for (int i = startHour; i < duration + startHour; i++) {
-            query.append(",hour" + i + "=?");
-        }
-        query.append(" WHERE day=" + day);
-
-        try {
-            PreparedStatement update = databaseConnection.
-                    prepareStatement(query.toString());
-
-            update.setInt(1, day);
-            for (int i = 0; i < duration; i++) {
-                update.setString(i + 2, course);
-            }
-            update.executeUpdate();
-
-        } catch (SQLException e) {
-            //  e.printStackTrace();
-        }
-
-    }
 
 
     public Schedule getSchedule(String schedule) {
@@ -84,6 +62,15 @@ public class ScheduleManager {
             System.err.println("Error while retrieving the schedule for: " + schedule);
         }
         return retrievedSchedule;
+    }
+    public void addCourse(Course course){
+        databaseManager.addCourse(course);
+        databaseManager.createEnrollmentTable(course);
+        ArrayList<String> list = course.getAttandees();
+        for(String student : list){
+            databaseManager.updateSchedule(student, course.getCourseName(), course.getDay(), course.getStartHour(), course.getDuration());
+        }
+
     }
 
 }

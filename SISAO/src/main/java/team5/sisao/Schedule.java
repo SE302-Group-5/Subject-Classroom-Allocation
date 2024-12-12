@@ -24,9 +24,9 @@ public class Schedule {
         return weeklyProgram;
     }
 
-    public Schedule updateSchedule(Schedule schedule, int day, int hour, String word) {
+    public Schedule updateSchedule(Schedule schedule, int day, int hour, String courseToChange) {
         String[][] current = schedule.getWeeklyProgram();
-        current[day][hour] = word;
+        current[day][hour] = courseToChange;
         schedule.setWeeklyProgram(current);
         return schedule;
     }

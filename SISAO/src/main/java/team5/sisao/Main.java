@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -42,10 +43,13 @@ public class Main extends Application {
         DatabaseManager db = new DatabaseManager();
         db.boot();
         System.out.println("DB connection established");
-        Course ege = new Course("MathForEge",4,5,2,"EgeAkin","M1000");
-
+        ArrayList<String> s = new ArrayList<>();
+        s.add("BORA_ALTAŞ");
+        Course eren = new Course("MATTTTAAAA302","Monday 8:30","3","John","M01",s);
+ScheduleManager sm = new ScheduleManager(db);
         System.out.println("An example course is created for testing purposes ");
-        db.addCourse(ege);
+        sm.addCourse(eren);
+
         launch(args);
     }
 }
