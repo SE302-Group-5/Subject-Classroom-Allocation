@@ -43,12 +43,6 @@ public class Main extends Application {
         DatabaseManager db = new DatabaseManager();
         db.boot();
         System.out.println("DB connection established");
-        ArrayList<String> s = new ArrayList<>();
-        s.add("BORA_ALTAŞ");
-        Course eren = new Course("MATTTTAAAA302","Monday 8:30","3","John","M01",s);
-ScheduleManager sm = new ScheduleManager(db);
-        System.out.println("An example course is created for testing purposes ");
-        sm.addCourse(eren);
 
         launch(args);
     }
