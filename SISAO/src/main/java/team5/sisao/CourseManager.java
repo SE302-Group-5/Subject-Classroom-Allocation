@@ -1,18 +1,22 @@
 package team5.sisao;
 
+import java.util.ArrayList;
+
 public class CourseManager {
-    
 
-    public void addCourse(String courseName, String dayAndStartHour, String duration,String lecturer,String clasroom, ArrayList<String> attandees){
-        Course course = createCourse(courseName,dayAndStartHour,duration,lecturer,clasroom,attandees);
-        boolean isUnique = isUnique(course.getCourseName());
+    private static ScheduleManager scheduleManager;
+
+    public void addCourse(String courseName, String day, String hour, int duration, String lecturer, String classroom, ArrayList<String> attendees) {
+        DatabaseManager databaseManager = scheduleManager.getDatabaseManager();
+
+        boolean isUnique = databaseManager.isCourseNameUnique(courseName);
+
         if (isUnique) {
-
-
+            Course course = new Course(courseName, day, hour, duration, lecturer, classroom, attendees);
             databaseManager.addCourse(course);
             databaseManager.createEnrollmentTable(course);
             ArrayList<String> list = course.getAttandees();
-            for(String student : list){
+            for (String student : list) {
                 databaseManager.updateSchedule(student, course.getCourseName(), course.getDay(), course.getStartHour(), course.getDuration());
             }
         } else {
@@ -21,28 +25,6 @@ public class CourseManager {
 
 
     }
-    public Course createCourse(String courseName, String dayAndStartHour, String duration,String lecturer,String clasroom, ArrayList<String> attandees) {
-        return new Course(courseName, dayAndStartHour,duration,clasroom,lecturer,attandees);
-    }
-
-    public boolean isUnique(String name){
-        boolean unique = true;
-        ArrayList<String> courseList;
-        StringBuilder st = new StringBuilder("SELECT COUNT(*) AS count FROM courses WHERE courseName = " + name);
-
-        try {
-            var pstmt = databaseConnection.prepareStatement(String.valueOf(st));
-            var rs = pstmt.executeQuery();
-            int count = rs.getInt("count");
-            if(count != 0){
-                unique = false;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
 
-
-        return unique;
-    }
 }
