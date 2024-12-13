@@ -23,8 +23,7 @@ public class DatabaseManager {
 
     public static Connection databaseConnection;
     private boolean dbExists;
-
-    // TRY OUT COMMAND
+// TRY OUT COMMAND
     public DatabaseManager() {
 
 
@@ -196,7 +195,7 @@ public class DatabaseManager {
                     if (isAvailable(classroom.getClassroomName(), day, startHour, duration) && capacity >= enrollment) {
                         updateSchedule(classroom.getClassroomName(), course.getCourseName(), day, startHour, duration);
                         course.setClassroom(classroom.getClassroomName());
-                        System.out.println("Assigned " + classroom.getClassroomName() + " with size " + capacity + " to " + course.getCourseName() + " with size " + enrollment);
+                        System.out.println("Assigned " + classroom.getClassroomName()+" with size "+capacity+ " to " + course.getCourseName()+ " with size "+enrollment);
                         //    System.out.println(classroom.getClassroomName() +" "+classroom.getCapacity() +"    " + course.getCourseName()+" "+getEnrollmentCount(course.getCourseName()));
                         break;
                     }
@@ -513,7 +512,6 @@ public class DatabaseManager {
 
         return freeHours;
     }
-
     public ArrayList<Classroom> getClassrooms() {
         ArrayList<Classroom> classrooms = new ArrayList<>();
         var sql = "SELECT classroomName, capacity FROM Classrooms";
@@ -534,7 +532,7 @@ public class DatabaseManager {
 
     }
 
-    public ArrayList<Course> getCourses() {
+	public ArrayList<Course> getCourses() {
         System.out.println("Inside the getCourses method");
         ArrayList<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM Courses";
@@ -553,8 +551,12 @@ public class DatabaseManager {
                 String classroom = rs.getString("classroom"); // column 6
 
 
+
+
+
+
                 // Create and add the Course object to the list
-                Course temp = new Course(courseName, Integer.parseInt(day), Integer.parseInt(startHour), Integer.parseInt(duration), lecturer, classroom);
+                Course temp = new Course(courseName, Integer.parseInt(day),Integer.parseInt(startHour), Integer.parseInt(duration), lecturer,classroom);
                 courses.add(temp);
             }
         } catch (SQLException e) {
@@ -569,8 +571,10 @@ public class DatabaseManager {
     }
 
 
+
     public void addCourse(Course course) {
         // Validate the input
+
         if (course == null) {
             System.out.println("Cannot add a null course.");
             return;
@@ -613,9 +617,11 @@ public class DatabaseManager {
         }
 
 
+
         // update the schedule for each attendee.
 
     }
+
 
 
     public Schedule getSchedule(String schedule) {

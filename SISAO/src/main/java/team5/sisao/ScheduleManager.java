@@ -63,14 +63,6 @@ public class ScheduleManager {
         }
         return retrievedSchedule;
     }
-    public void addCourse(Course course){
-        databaseManager.addCourse(course);
-        databaseManager.createEnrollmentTable(course);
-        ArrayList<String> list = course.getAttandees();
-        for(String student : list){
-            databaseManager.updateSchedule(student, course.getCourseName(), course.getDay(), course.getStartHour(), course.getDuration());
-        }
 
-    }
 
 }

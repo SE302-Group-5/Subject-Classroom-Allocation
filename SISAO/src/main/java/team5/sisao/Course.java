@@ -34,14 +34,14 @@ public class Course {
 
     }
     // constructor for addCourse()
-    public Course(String courseName, String dayAndStartHour, String duration, String lecturer,String classroomlassroom, ArrayList<String> attandees) {
+    public Course(String courseName, String dayAndStartHour, String duration, String lecturer,String classroom, ArrayList<String> attandees) {
         String[] dayAndHour = dayAndStartHour.split(" ");
         this.day = getDayInteger(dayAndHour[0]);
         this.startHour = getStartHourInteger(dayAndHour[1]);
         this.courseName = courseName;
         this.lecturer = lecturer;
         this.duration = Integer.parseInt(duration);
-        this.classroom = classroomlassroom;
+        this.classroom = classroom;
         this.attandees = attandees;
     }
 
