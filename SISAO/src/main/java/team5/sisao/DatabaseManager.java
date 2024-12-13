@@ -669,4 +669,27 @@ public class DatabaseManager {
 
         return students;
     }
+
+    public boolean isCourseNameUnique(String courseName) {
+
+        boolean unique = true;
+        ArrayList<String> courseList;
+        StringBuilder st = new StringBuilder("SELECT COUNT(*) AS count FROM courses WHERE courseName = " + courseName);
+
+        try {
+            var pstmt = databaseConnection.prepareStatement(String.valueOf(st));
+            var rs = pstmt.executeQuery();
+            int count = rs.getInt("count");
+            if (count != 0) {
+                unique = false;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return unique;
+    }
+
+
 }
