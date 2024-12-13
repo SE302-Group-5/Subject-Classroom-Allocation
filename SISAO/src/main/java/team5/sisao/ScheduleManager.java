@@ -42,9 +42,6 @@ public class ScheduleManager {
     }
 
 
-
-
-
     public Schedule getSchedule(String schedule) {
         Schedule retrievedSchedule = new Schedule();
 
@@ -64,5 +61,7 @@ public class ScheduleManager {
         return retrievedSchedule;
     }
 
-
+    public DatabaseManager getDatabaseManager() {
+        return this.databaseManager;
+    }
 }
