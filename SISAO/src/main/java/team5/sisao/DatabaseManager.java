@@ -673,11 +673,11 @@ public class DatabaseManager {
     public boolean isCourseNameUnique(String courseName) {
 
         boolean unique = true;
-        ArrayList<String> courseList;
-        StringBuilder st = new StringBuilder("SELECT COUNT(*) AS count FROM courses WHERE courseName = " + courseName);
+
+        String st = "SELECT COUNT(*) AS count FROM courses WHERE courseName ="+'"'+ courseName+'"';
 
         try {
-            var pstmt = databaseConnection.prepareStatement(String.valueOf(st));
+            var pstmt = databaseConnection.prepareStatement(st);
             var rs = pstmt.executeQuery();
             int count = rs.getInt("count");
             if (count != 0) {
