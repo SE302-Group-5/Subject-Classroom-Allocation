@@ -6,12 +6,16 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+
 import static javafx.collections.FXCollections.observableArrayList;
 
 /**
@@ -21,9 +25,13 @@ import static javafx.collections.FXCollections.observableArrayList;
 public class MainController {
 
     public ImageView logo;
+    @FXML
+    public TextField txtfieldAddNewCourseName, txtfieldAddNewCourseLecturer;
+    @FXML
+    private VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxAddNewCourse;
     //Buttons
     @FXML
-    private Button btnViewClassrooms, btnViewStudents, btnViewCourses;
+    private Button btnViewClassrooms, btnViewStudents, btnViewCourses, btnAddNewCourse, btnAddStudentToCourse, btnAddNewCourseConfirm;
     @FXML
     private Button btnHelp;
     @FXML
@@ -45,17 +53,40 @@ public class MainController {
     @FXML
     private TableColumn<Course, Integer> columnAttendees;
 
+    private ArrayList<VBox> vboxList = new ArrayList<>();
 
     private ArrayList<Course> coursesList = new ArrayList<>();
     private ObservableList<Course> observableCoursesList;
 
     private DatabaseManager db;
 
+
     //initializes logo
     public void initialize() {
         logo.setImage(new Image(getClass().getResource("/team5/sisao/logo.png").toExternalForm()));
         this.db = new DatabaseManager();
 
+        vboxList = new ArrayList<VBox>();
+        vboxList.add(vboxViewCourses);
+
+        vboxList.add(vboxAddNewCourse);
+        disableAllVboxes(vboxList);
+    }
+
+    private void disableVbox(VBox vbox) {
+        vbox.setDisable(true);
+        vbox.setVisible(false);
+    }
+
+    private void enableVbox(VBox vbox) {
+        vbox.setDisable(false);
+        vbox.setVisible(true);
+    }
+
+    private void disableAllVboxes(ArrayList<VBox> vboxList) {
+        for (VBox vbox : vboxList) {
+            disableVbox(vbox);
+        }
     }
 
     //View methods
@@ -68,6 +99,8 @@ public class MainController {
     }
 
     public void ViewCourses() {
+        disableAllVboxes(vboxList);
+        enableVbox(vboxViewCourses);
 
         System.out.println("Courses button clicked");
         coursesList = this.db.getCourses();
@@ -98,6 +131,33 @@ public class MainController {
         columnClassroom.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClassroom()));
     }
 
+    public void addNewCourseSetNameAndLecturer() {
+        disableAllVboxes(vboxList);
+        enableVbox(vboxAddNewCourse);
+        btnAddNewCourseConfirm.setDisable(true);
+
+        System.out.println("Add New Course button clicked");
+
+        txtfieldAddNewCourseName.textProperty().addListener((observable, oldValue, newValue) -> toggleAddNewCourseConfirmButton());
+        txtfieldAddNewCourseLecturer.textProperty().addListener((observable, oldValue, newValue) -> toggleAddNewCourseConfirmButton());
+
+    }
+
+    public void toggleAddNewCourseConfirmButton() {
+        if (!txtfieldAddNewCourseName.getText().isBlank() && !txtfieldAddNewCourseLecturer.getText().isBlank()) {
+            if (db.isCourseNameUnique(txtfieldAddNewCourseName.getText().trim())) {
+                btnAddNewCourseConfirm.setDisable(false);
+            }
+            // Enable the button
+        } else {
+            btnAddNewCourseConfirm.setDisable(true);
+        }
+    }
+
+    public void addNewCourseSetStudents() {
+
+    }
+
     // Other methods to be implemented
     public void handleAdd() {
         System.out.println("Add button clicked");
@@ -113,21 +173,22 @@ public class MainController {
         System.out.println("Delete button clicked");
 
     }
-}
 
-//Class to change the current pane
+
+    //Class to change the current pane
 //retrieves corresponding FXML doc
 //e.g. classroomAdd.fxml
-class SceneSwitcher {
+    class SceneSwitcher {
 
-    public static void switchScene(String fxmlFile) {
-        try {
-            Stage stage = Main.getPrimaryStage();
-            Parent root = FXMLLoader.load(SceneSwitcher.class.getResource("/team5/sisao/main.fxml" + fxmlFile));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
+        public static void switchScene(String fxmlFile) {
+            try {
+                Stage stage = Main.getPrimaryStage();
+                Parent root = FXMLLoader.load(SceneSwitcher.class.getResource("/team5/sisao/main.fxml" + fxmlFile));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
