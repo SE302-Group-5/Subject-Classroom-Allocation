@@ -692,5 +692,90 @@ public class DatabaseManager {
         return unique;
     }
 
+    public void changeClassroom(String  courseName, String classroomName) {
+        Course course = getCourse(courseName);
+        Classroom classroom = getClassroom(classroomName);
 
+        if (course == null || classroom == null) {
+            System.out.println("Classroom or course not found");
+            return;
+        }
+        int enrollment = getEnrollmentCount(course.getCourseName());
+        if (classroom.getCapacity() >= enrollment) {
+            int day = course.getDay();
+            int startHour = course.getStartHour();
+            int duration = course.getDuration();
+
+            if (isAvailable(classroom.getClassroomName(), day, startHour, duration)) {
+                if (course.getClassroom() != null) {
+                    //removing the course from the old classroom's schedule
+                    updateSchedule(course.getClassroom(), "", day, startHour, duration);
+                }
+                //update the classroom's schedule
+                updateSchedule(classroom.getClassroomName(), course.getCourseName(), day, startHour, duration);
+                //update the course's classroom
+                course.setClassroom(classroom.getClassroomName());
+                //UPDATE THE DB RECORD
+                String SQLString = "UPDATE Courses SET classroom = ? WHERE courseName = ?";
+                try {
+                    PreparedStatement pstmt = databaseConnection.prepareStatement(SQLString);
+                    pstmt.setString(1, classroom.getClassroomName());
+                    pstmt.setString(2, course.getCourseName());
+                    pstmt.executeUpdate();
+                    System.out.println("Classroom updated successfully");
+                } catch (SQLException e) {
+                    System.err.printf("Error while updating the classroom: %s%n", e.getMessage());
+                    throw new RuntimeException(e);
+                }
+            }else {
+                System.out.println("Classroom is not available at this time");
+            }
+        }else{
+            System.out.println("Classroom does not have enough capacity");
+        }
+    }
+
+    public Course getCourse(String courseName) {
+        try {
+            String sql = "SELECT * FROM Courses WHERE courseName = ?";
+            PreparedStatement coursepstmt = databaseConnection.prepareStatement(sql);
+            coursepstmt.setString(1, courseName);
+            ResultSet coursers = coursepstmt.executeQuery();
+            if (coursers.next()) {
+
+                String day = coursers.getString("courseDay");
+                String startHour = coursers.getString("courseTime");
+                String duration = coursers.getString("duration");
+                String lecturer = coursers.getString("lecturer");
+                String classroom = coursers.getString("classroom");
+
+                return new Course(courseName, Integer.parseInt(day),
+                        Integer.parseInt(startHour),
+                        Integer.parseInt(duration),
+                        lecturer,
+                        classroom);
+            }
+        } catch (SQLException e) {
+            System.err.printf("Error while retrieving the course from the database: %s%n", e.getMessage());
+            return null;
+        }
+        return null;
+    }
+
+    public Classroom getClassroom(String classroomName) {
+        try {
+            String sql = "SELECT * FROM Classrooms WHERE classroomName = ?";
+            PreparedStatement classroompstmt = databaseConnection.prepareStatement(sql);
+            classroompstmt.setString(1,classroomName);
+            ResultSet classroomrs = classroompstmt.executeQuery();
+            if (classroomrs.next()) {
+                String capacity = classroomrs.getString("capacity");
+                return new Classroom(classroomName, capacity);
+            }
+        } catch (SQLException e) {
+            System.err.printf("Error while retrieving the classroom: %s%n", e.getMessage());
+            return null;
+        }
+        return null;
+    }
 }
