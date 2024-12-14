@@ -692,6 +692,59 @@ public class DatabaseManager {
         return unique;
     }
 
+    public void swapClassrooms(String courseName1, String courseName2) {
+        Course course1 = getCourse(courseName1);
+        Course course2 = getCourse(courseName2);
+        if(course1 == null || course2 == null) {
+            System.out.println("Courses not found");
+            return;
+        }
+        Classroom classroom1 = getClassroom(course1.getClassroom());
+        Classroom classroom2 = getClassroom(course2.getClassroom());
+        if(classroom1 == null || classroom2 == null) {
+            System.out.println("Classrooms not found");
+            return;
+        }
+        //check if the capacities of to be changed align
+        if(classroom1.getCapacity() >= getEnrollmentCount(course2.getCourseName()) && classroom2.getCapacity() >= getEnrollmentCount(course1.getCourseName())) {
+            //emptying current classrooms for courses
+            emptyClassroom(course1,classroom1);
+            emptyClassroom(course2,classroom2);
+            //try to change both courses' classrooms
+            try{
+                changeClassroom(course1.getCourseName(), classroom2.getClassroomName());
+            }catch (RuntimeException e) {
+                //if change classroom fails, restore original classroom
+                //revert the emptied classrooms
+                changeClassroom(course1.getCourseName(), classroom1.getClassroomName());
+                System.out.println("Classroom swap failed: " + e.getMessage());
+                return;
+            }try {
+                changeClassroom(course2.getCourseName(), classroom1.getClassroomName());
+                System.out.println("Classrooms swapped successfully");
+            }catch (RuntimeException e) {
+                //if change classroom fails, restore original classrooms
+                //revert the emptied classrooms
+                changeClassroom(course2.getCourseName(), classroom2.getClassroomName());
+                System.out.println("Classroom swap failed: " + e.getMessage());
+                return;
+            }
+        } else {
+        System.out.println("Classroom capacities do not match course enrollments");
+    }
+
+    }
+
+    private void emptyClassroom(Course course, Classroom classroom) {
+        if (classroom != null && course != null && course.getClassroom() != null) {
+            //remove the course from the current classroom's schedule
+            int day = course.getDay();
+            int startHour = course.getStartHour();
+            int duration = course.getDuration();
+            updateSchedule(classroom.getClassroomName(), "", day, startHour, duration);
+        }
+    }
+
     public void changeClassroom(String  courseName, String classroomName) {
         Course course = getCourse(courseName);
         Classroom classroom = getClassroom(classroomName);
