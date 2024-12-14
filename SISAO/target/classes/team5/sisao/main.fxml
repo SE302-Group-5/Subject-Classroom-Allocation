@@ -1,99 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Accordion?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team5.sisao.MainController">
-    <VBox fx:id="vboxMain">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team5.sisao.MainController">
+    <VBox>
         <HBox alignment="CENTER" maxWidth="Infinity" prefHeight="80.0" prefWidth="1000.0" style="-fx-background-color: #D3D3D3; -fx-padding: 10;">
 
-            <ImageView fx:id="logo" fitHeight="60.0" fitWidth="60.0" />
+                <ImageView fx:id="logo" fitHeight="60.0" fitWidth="60.0" />
 
             <Label alignment="BASELINE_CENTER" prefHeight="50.0" prefWidth="124.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="SISAO ">
-                <font>
-                    <Font size="96.0" />
-                </font></Label>
+            <font>
+               <Font size="96.0" />
+            </font></Label>
         </HBox>
 
         <!-- Main HBox to hold both button sections -->
         <HBox prefHeight="421.0" prefWidth="800.0">
-
+            
             <!-- VBox for Action Buttons (Left Section) -->
-            <VBox fx:id="vboxLeftMain" prefHeight="483.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
-                <Accordion>
-                    <panes>
-                        <TitledPane animated="false" text="View">
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                <Button fx:id="btnViewClassrooms" layoutX="4.0" layoutY="14.0" onAction="#ViewClassrooms" prefHeight="25.0" prefWidth="150.0" text="Classrooms" />
-                                <Button fx:id="btnViewStudents" layoutX="4.0" layoutY="47.0" onAction="#ViewStudents" prefHeight="25.0" prefWidth="150.0" text="Students" />
-                                <Button fx:id="btnViewCourses" layoutX="4.0" layoutY="78.0" onAction="#ViewCourses" prefHeight="25.0" prefWidth="150.0" text="Courses" />
-                            </AnchorPane>
-                        </TitledPane>
-                        <TitledPane animated="false" text="Delete">
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </TitledPane>
-                        <TitledPane animated="false" text="Change">
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </TitledPane>
-                        <TitledPane animated="false" text="Add">
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                <children>
-                                    <Button fx:id="btnAddNewCourse" layoutX="7.0" layoutY="14.0" onAction="#addNewCourseSetNameAndLecturer" prefHeight="25.0" prefWidth="150.0" text="Add New Course" />
-                                    <Button fx:id="btnAddStudentToCourse" layoutX="7.0" layoutY="46.0" prefHeight="25.0" prefWidth="150.0" text="Add Student to Course" />
-                                </children></AnchorPane>
-                        </TitledPane>
-                    </panes>
-                </Accordion>
+            <VBox prefHeight="483.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
+            <Accordion>
+              <panes>
+                  <TitledPane animated="false" text="View">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <Button fx:id="btnViewClassrooms" layoutX="4.0" layoutY="14.0" onAction="#ViewClassrooms" prefHeight="25.0" prefWidth="150.0" text="Classrooms" />
+                          <Button fx:id="btnViewStudents" layoutX="4.0" layoutY="47.0" onAction="#ViewStudents" prefHeight="25.0" prefWidth="150.0" text="Students" />
+                          <Button fx:id="btnViewCourses" layoutX="4.0" layoutY="78.0" onAction="#ViewCourses" prefHeight="25.0" prefWidth="150.0" text="Courses" />
+                      </AnchorPane>
+                  </TitledPane>
+                  <TitledPane animated="false" text="Add">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </TitledPane>
+                  <TitledPane animated="false" text="Delete">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </TitledPane>
+                  <TitledPane animated="false" text="Change">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </TitledPane>
+              </panes>
+            </Accordion>
 
                 <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help" />
             </VBox>
-            <StackPane prefHeight="421.0" prefWidth="814.0">
-                <children>
-                    <VBox fx:id="vboxViewCourses" disable="true" opacity="0.0" prefHeight="421.0" prefWidth="587.0">
-                        <TextArea fx:id="textAreaCourses" disable="true" editable="false" prefHeight="38.0" prefWidth="621.0" visible="false" wrapText="true">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </TextArea>
-                        <TableView fx:id="tableViewCourses" layoutX="100" layoutY="100" prefHeight="400" prefWidth="600" visible="false">
-                            <columns>
-                                <TableColumn fx:id="columnCourseName" prefWidth="150" text="Course Name" />
-                                <TableColumn fx:id="columnStartHour" prefWidth="100" text="Start Hour" />
-                                <TableColumn fx:id="columnDuration" prefWidth="100" text="Duration" />
-                                <TableColumn fx:id="columnLecturer" prefWidth="150" text="Lecturer" />
-                                <TableColumn fx:id="columnDay" prefWidth="100" text="Day" />
-                                <TableColumn fx:id="columnClassroom" prefWidth="100" text="Classroom" />
-                                <TableColumn fx:id="columnAttendees" prefWidth="100" text="Attendees" />
-                            </columns>
-                        </TableView>
-                    </VBox>
-                    <VBox fx:id="vboxAddNewCourse" disable="true" prefHeight="200.0" prefWidth="100.0">
-                        <children>
-                            <Label text="Course Name" />
-                            <TextField fx:id="txtfieldAddNewCourseName" promptText="Enter Course Name Here..." />
-                            <Label text="Lecturer" />
-                            <TextField fx:id="txtfieldAddNewCourseLecturer" promptText="Enter Lecturer Here..." />
-                            <HBox prefHeight="31.0" prefWidth="814.0">
-                                <children>
-                                    <Button fx:id="btnAddNewCourseConfirm" mnemonicParsing="false" onAction="#addNewCourseSetStudents" text="Confirm" />
-                                </children>
-                            </HBox>
-                        </children>
-                    </VBox>
-                </children>
-            </StackPane>
+            <VBox prefHeight="595.0" prefWidth="800.0">
+                <TextArea fx:id="textAreaCourses" disable="true" editable="false" prefHeight="38.0" prefWidth="621.0" visible="false" wrapText="true">
+               <font>
+                  <Font size="15.0" />
+               </font></TextArea>
+                <TableView fx:id="tableViewCourses" layoutX="100" layoutY="100" prefHeight="400" prefWidth="600" visible="false">
+                    <columns>
+                        <TableColumn fx:id="columnCourseName" prefWidth="150" text="Course Name" />
+                        <TableColumn fx:id="columnStartHour" prefWidth="100" text="Start Hour" />
+                        <TableColumn fx:id="columnDuration" prefWidth="100" text="Duration" />
+                        <TableColumn fx:id="columnLecturer" prefWidth="150" text="Lecturer" />
+                        <TableColumn fx:id="columnDay" prefWidth="100" text="Day" />
+                        <TableColumn fx:id="columnClassroom" prefWidth="100" text="Classroom" />
+                        <TableColumn fx:id="columnAttendees" prefWidth="100" text="Attendees" />
+                    </columns>
+                </TableView>
+            </VBox>
 
 
         </HBox>
