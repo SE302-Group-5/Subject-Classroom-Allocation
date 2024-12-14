@@ -652,14 +652,15 @@ public class DatabaseManager {
         List<String> students = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM Students";
+            String sql = "SELECT studentName FROM Students";
             Statement stmt = databaseConnection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-
+            // int i =0;
             while (rs.next()) {
-                String studentName = rs.getString("student_name");
+                String studentName = rs.getString("studentName");
                 if (studentName != null) {
                     students.add(studentName);
+                    //  System.out.println(studentName+" "+i);i++;
                 }
             }
         } catch (SQLException e) {
