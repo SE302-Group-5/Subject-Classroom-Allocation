@@ -149,6 +149,10 @@ public class Course {
     public void setClassroom(String classroom) {
         this.classroom = classroom;
     }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
 }
 
 

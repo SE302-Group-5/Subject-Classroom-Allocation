@@ -1,7 +1,6 @@
 package team5.sisao;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 
 import static team5.sisao.DatabaseManager.databaseConnection;
@@ -22,7 +21,7 @@ public class ScheduleManager {
             String student = students.get(i);
             for (int day = 0; day < 7; day++) {
                 for (int hour = 0; hour < 16; hour++) {
-                    if (isAvailable(studentCompare, day, hour, 1) && isAvailable(student, day, hour, 1)) {
+                    if (databaseManager.isAvailable(studentCompare, day, hour, 1) && databaseManager.isAvailable(student, day, hour, 1)) {
                         freeHours.updateSchedule(freeHours, day, hour, "Y");
                     } else {
                         freeHours.updateSchedule(freeHours, day, hour, "N");
@@ -36,11 +35,6 @@ public class ScheduleManager {
 
         return freeHours;
     }
-
-    private boolean isAvailable(String name, int day, int startHour, int duration) {
-        return false;
-    }
-
 
     public Schedule getSchedule(String schedule) {
         Schedule retrievedSchedule = new Schedule();

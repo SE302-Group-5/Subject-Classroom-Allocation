@@ -4,27 +4,26 @@ import java.util.ArrayList;
 
 public class CourseManager {
 
-    private static ScheduleManager scheduleManager;
+    private static DatabaseManager db;
 
-    public void addCourse(String courseName, String day, String hour, int duration, String lecturer, String classroom, ArrayList<String> attendees) {
-        DatabaseManager databaseManager = scheduleManager.getDatabaseManager();
+    public Course addCourse(String courseName, String day, String hour, int duration, String lecturer, String classroom, ArrayList<String> attendees) {
 
-        boolean isUnique = databaseManager.isCourseNameUnique(courseName);
 
-        if (isUnique) {
-            Course course = new Course(courseName, day, hour, duration, lecturer, classroom, attendees);
-            databaseManager.addCourse(course);
-            databaseManager.createEnrollmentTable(course);
-            ArrayList<String> list = course.getAttandees();
-            for (String student : list) {
-                databaseManager.updateSchedule(student, course.getCourseName(), course.getDay(), course.getStartHour(), course.getDuration());
-            }
-        } else {
-            System.out.println("there are a course with the same name you want to add");
+        Course course = new Course(courseName, day, hour, duration, lecturer, classroom, attendees);
+
+        db.createEnrollmentTable(course);
+        db.addCourse(course);
+
+        ArrayList<String> list = course.getAttandees();
+        for (String student : list) {
+            db.updateSchedule(student, course.getCourseName(), course.getDay(), course.getStartHour(), course.getDuration());
         }
-
+        return course;
 
     }
 
+    public CourseManager(DatabaseManager db) {
+        this.db = db;
+    }
 
 }
