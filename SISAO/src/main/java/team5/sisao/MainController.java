@@ -85,6 +85,11 @@ public class MainController {
         this.classroomManager = new ClassroomManager(this.db);
         this.courseManager = new CourseManager(this.db);
         vboxList = new ArrayList<VBox>();
+        // Only add the vboxes which you want to disable to the vboxList
+        // Never put main vboxes
+        // My idea was to simulate screen change by disabling and enabling vboxes
+        // could be stupid
+        // These vboxes are stored in a stackpane in FXML so they are on top of each other
         vboxList.add(vboxViewCourses);
 
         vboxList.add(vboxAddNewCourse);
@@ -121,6 +126,8 @@ public class MainController {
     public void ViewCourses() {
         disableAllVboxes();
         enableVbox(vboxViewCourses);
+        // Above part this necessary for all the vboxes that will be visible or invisible
+        // according to user input
 
         System.out.println("Courses button clicked");
         coursesList = this.db.getCourses();
@@ -154,10 +161,14 @@ public class MainController {
     public void addNewCourseSetNameAndLecturer() {
         disableAllVboxes();
         enableVbox(vboxAddNewCourse);
+        // Above part this necessary for all the vboxes that will be visible or invisible
+        // according to user input
         listviewAddNewCourseSelectedStudents.getItems().clear();
         listviewAddNewCourseSearchStudent.getItems().clear();
         txtfieldAddNewCourseName.clear();
         txtfieldAddNewCourseLecturer.clear();
+        // Clearing operations above are useful when user presses Add New Course again
+        // This makes it seem like the screen was reloaded
 
         btnAddNewCourseConfirm.setDisable(true);
 
@@ -165,7 +176,8 @@ public class MainController {
 
         txtfieldAddNewCourseName.textProperty().addListener((observable, oldValue, newValue) -> toggleAddNewCourseConfirmButton());
         txtfieldAddNewCourseLecturer.textProperty().addListener((observable, oldValue, newValue) -> toggleAddNewCourseConfirmButton());
-
+        // Goal here was to make the button disabled when fields are empty
+        // Could have just made it so that the button is enabled but does nothing
     }
 
     public void toggleAddNewCourseConfirmButton() {
@@ -183,6 +195,8 @@ public class MainController {
 
         disableAllVboxes();
         enableVbox(vboxAddNewCourseStudents);
+        // Above part this necessary for all the vboxes that will be visible or invisible
+        // according to user input
 
         courseName = txtfieldAddNewCourseName.getText();
         courseLecturer = txtfieldAddNewCourseLecturer.getText();
