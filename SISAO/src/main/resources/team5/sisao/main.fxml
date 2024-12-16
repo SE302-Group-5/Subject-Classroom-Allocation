@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -19,16 +20,17 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team5.sisao.MainController">
-    <VBox fx:id="vboxMain">
+    <VBox fx:id="vboxMain" prefHeight="563.0" prefWidth="1000.0">
         <HBox alignment="CENTER" maxWidth="Infinity" prefHeight="80.0" prefWidth="1000.0" style="-fx-background-color: #D3D3D3; -fx-padding: 10;">
 
             <ImageView fx:id="logo" fitHeight="60.0" fitWidth="60.0" />
 
-            <Label alignment="BASELINE_CENTER" prefHeight="50.0" prefWidth="124.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="SISAO ">
+            <Label alignment="CENTER" contentDisplay="CENTER" ellipsisString="" prefHeight="29.0" prefWidth="116.0" scaleX="1.3" scaleY="1.3" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="SISAO " textAlignment="CENTER" textOverrun="CLIP">
                 <font>
-                    <Font size="96.0" />
+                    <Font name="System Bold Italic" size="96.0" />
                 </font></Label>
         </HBox>
 
@@ -36,7 +38,7 @@
         <HBox prefHeight="421.0" prefWidth="800.0">
 
             <!-- VBox for Action Buttons (Left Section) -->
-            <VBox fx:id="vboxLeftMain" prefHeight="483.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
+            <VBox fx:id="vboxLeftMain" maxHeight="514.0" minHeight="500.0" prefHeight="514.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
                 <Accordion>
                     <panes>
                         <TitledPane animated="false" text="View">
@@ -45,141 +47,261 @@
                                 <Button fx:id="btnViewStudents" layoutX="4.0" layoutY="47.0" onAction="#ViewStudents" prefHeight="25.0" prefWidth="150.0" text="Students" />
                                 <Button fx:id="btnViewCourses" layoutX="4.0" layoutY="78.0" onAction="#ViewCourses" prefHeight="25.0" prefWidth="150.0" text="Courses" />
                             </AnchorPane>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                         </TitledPane>
                         <TitledPane animated="false" text="Delete">
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                         </TitledPane>
                         <TitledPane animated="false" text="Change">
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                         </TitledPane>
                         <TitledPane animated="false" text="Add">
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                <children>
-                                    <Button fx:id="btnAddNewCourse" layoutX="7.0" layoutY="14.0" onAction="#addNewCourseSetNameAndLecturer" prefHeight="25.0" prefWidth="150.0" text="Add New Course" />
-                                    <Button fx:id="btnAddStudentToCourse" layoutX="7.0" layoutY="46.0" prefHeight="25.0" prefWidth="150.0" text="Add Student to Course" />
-                                </children></AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="163.0">
+                                <Button fx:id="btnAddNewCourse" layoutX="7.0" layoutY="14.0" onAction="#addNewCourseSetNameAndLecturer" prefHeight="25.0" prefWidth="150.0" text="Add New Course" />
+                                <Button fx:id="btnAddStudentToCourse" layoutX="7.0" layoutY="46.0" prefHeight="25.0" prefWidth="150.0" text="Add Student to Course" />
+                            </AnchorPane>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                         </TitledPane>
                     </panes>
                 </Accordion>
 
-                <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help" />
+                <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
             </VBox>
-            <StackPane prefHeight="421.0" prefWidth="814.0">
-                <children>
-                    <VBox fx:id="vboxViewCourses" prefHeight="421.0" prefWidth="587.0" visible="false">
-                        <TextArea fx:id="textAreaCourses" disable="true" editable="false" prefHeight="38.0" prefWidth="621.0" visible="false" wrapText="true">
-                            <font>
-                                <Font size="15.0" />
-                            </font>
-                        </TextArea>
-                        <TableView fx:id="tableViewCourses" layoutX="100" layoutY="100" prefHeight="400" prefWidth="600" visible="false">
-                            <columns>
-                                <TableColumn fx:id="columnCourseName" prefWidth="150" text="Course Name" />
-                                <TableColumn fx:id="columnStartHour" prefWidth="100" text="Start Hour" />
-                                <TableColumn fx:id="columnDuration" prefWidth="100" text="Duration" />
-                                <TableColumn fx:id="columnLecturer" prefWidth="150" text="Lecturer" />
-                                <TableColumn fx:id="columnDay" prefWidth="100" text="Day" />
-                                <TableColumn fx:id="columnClassroom" prefWidth="100" text="Classroom" />
-                                <TableColumn fx:id="columnAttendees" prefWidth="100" text="Attendees" />
-                            </columns>
-                        </TableView>
-                    </VBox>
-                    <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" visible="false">
-                        <children>
-                            <Label text="Course Name" />
-                            <TextField fx:id="txtfieldAddNewCourseName" promptText="Enter Course Name Here..." />
-                            <Label text="Lecturer" />
-                            <TextField fx:id="txtfieldAddNewCourseLecturer" promptText="Enter Lecturer Here..." />
-                            <HBox prefHeight="31.0" prefWidth="814.0">
-                                <children>
-                                    <Button fx:id="btnAddNewCourseConfirm" mnemonicParsing="false" onAction="#addNewCourseSetStudents" text="Confirm" />
-                                </children>
-                            </HBox>
-                        </children>
-                    </VBox>
-                    <VBox fx:id="vboxAddNewCourseStudents" prefHeight="200.0" prefWidth="100.0" visible="false">
-                        <children>
-                            <TextField fx:id="txtfieldAddNewCourseSearchStudent" promptText="Search a student..." />
-                            <Label text="Search Results:" />
-                            <ListView fx:id="listviewAddNewCourseSearchStudent" prefHeight="200.0" prefWidth="200.0" />
-                            <Label text="Selected Students" />
-                            <ListView fx:id="listviewAddNewCourseSelectedStudents" prefHeight="200.0" prefWidth="200.0" />
-                            <Button fx:id="btnAddNewCourseStudentConfirm" mnemonicParsing="false" text="Confirm" />
-                        </children></VBox>
-                    <VBox fx:id="vboxAddNewCourseSchedule" disable="true" prefHeight="200.0" prefWidth="814.0" visible="false">
-                        <children>
-                     <Label text="Common Free Hours" />
-                            <GridPane fx:id="gridpaneAddNewCourseSchedule" gridLinesVisible="true" prefHeight="415.0" prefWidth="814.0">
-                                <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Monday" textAlignment="CENTER" GridPane.columnIndex="1" />
-                                    <Label text="Tuesday" GridPane.columnIndex="2" />
-                                    <Label text="Wednesday" GridPane.columnIndex="3" />
-                                    <Label text="Thursday" GridPane.columnIndex="4" />
-                                    <Label text="Friday" GridPane.columnIndex="5" />
-                                    <Label text="Saturday" GridPane.columnIndex="6" />
-                                    <Label text="Sunday" GridPane.columnIndex="7" />
-                                    <Label text="08:30" GridPane.rowIndex="1" />
-                                    <Label text="09:25" GridPane.rowIndex="2" />
-                                    <Label text="10:20" GridPane.rowIndex="3" />
-                                    <Label text="11:15" GridPane.rowIndex="4" />
-                                    <Label text="12:10" GridPane.rowIndex="5" />
-                                    <Label text="13:05" GridPane.rowIndex="6" />
-                                    <Label text="14:00" GridPane.rowIndex="7" />
-                                    <Label text="14:55" GridPane.rowIndex="8" />
-                                    <Label text="15:50" GridPane.rowIndex="9" />
-                                    <Label text="16:45" GridPane.rowIndex="10" />
-                                    <Label text="17:40" GridPane.rowIndex="11" />
-                                    <Label text="18:35" GridPane.rowIndex="12" />
-                                    <Label text="19:30" GridPane.rowIndex="13" />
-                                    <Label text="20:25" GridPane.rowIndex="14" />
-                                    <Label text="21:20" GridPane.rowIndex="15" />
-                                    <Label text="22:15" GridPane.rowIndex="16" />
-                                </children>
-                            </GridPane>
-                     <HBox prefHeight="100.0" prefWidth="200.0">
-                        <children>
-                           <Label text="Select the day, the start hour and the duration of the course" />
-                        </children>
-                     </HBox>
-                            <HBox prefHeight="100.0" prefWidth="200.0">
-                                <children>
-                                    <ChoiceBox fx:id="choiceboxAddNewCourseDay" prefWidth="150.0" />
-                                    <ChoiceBox fx:id="choiceboxAddNewCourseHour" prefWidth="150.0" />
-                                    <ChoiceBox fx:id="choiceboxAddNewCourseDuration" prefWidth="150.0" />
-                                </children>
-                            </HBox>
-                            <Button fx:id="btnAddNewCourseScheduleConfirm" mnemonicParsing="false" text="Confirm" />
-                        </children></VBox>
-                </children>
+            <StackPane prefHeight="477.0" prefWidth="814.0">
+                <VBox fx:id="vboxViewCourses" prefHeight="421.0" prefWidth="587.0" visible="false">
+                    <TextArea fx:id="textAreaCourses" accessibleRole="TEXT" disable="true" editable="false" focusTraversable="false" maxHeight="30.0" maxWidth="790.0" minHeight="30.0" prefHeight="30.0" prefWidth="700.0" translateX="10.0" visible="false" wrapText="true">
+                        <font>
+                            <Font size="15.0" />
+                        </font>
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+                    </TextArea>
+                    <TableView fx:id="tableViewCourses" fixedCellSize="0.0" layoutX="100" layoutY="100" maxWidth="790.0" minWidth="700.0" prefHeight="446.0" prefWidth="771.0" translateX="10.0" visible="false">
+                        <columns>
+                            <TableColumn fx:id="columnCourseName" prefWidth="150" text="Course Name" />
+                            <TableColumn fx:id="columnStartHour" prefWidth="100" text="Start Hour" />
+                            <TableColumn fx:id="columnDuration" prefWidth="100" text="Duration" />
+                            <TableColumn fx:id="columnLecturer" prefWidth="150" text="Lecturer" />
+                            <TableColumn fx:id="columnDay" prefWidth="100" text="Day" />
+                            <TableColumn fx:id="columnClassroom" prefWidth="100" text="Classroom" />
+                            <TableColumn fx:id="columnAttendees" prefWidth="100" text="Attendees" />
+                        </columns>
+                  <VBox.margin>
+                     <Insets />
+                  </VBox.margin>
+                    </TableView>
+                </VBox>
+                <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" translateX="10.0" visible="false">
+                    <Label prefWidth="220.0" text="Course Name" translateX="40.0">
+                  <VBox.margin>
+                     <Insets top="20.0" />
+                  </VBox.margin>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+                  <font>
+                     <Font size="15.0" />
+                  </font></Label>
+                    <TextField fx:id="txtfieldAddNewCourseName" maxWidth="500.0" prefWidth="500.0" promptText="Enter Course Name Here..." translateX="40.0">
+                  <VBox.margin>
+                     <Insets top="5.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="15.0" />
+                  </font></TextField>
+                    <Label prefWidth="220.0" text="Lecturer" translateX="40.0">
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+                  <font>
+                     <Font size="15.0" />
+                  </font></Label>
+                    <TextField fx:id="txtfieldAddNewCourseLecturer" maxWidth="500.0" prefWidth="500.0" promptText="Enter Lecturer Here..." translateX="40.0">
+                  <VBox.margin>
+                     <Insets top="5.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="15.0" />
+                  </font></TextField>
+                    <HBox prefHeight="31.0" prefWidth="814.0">
+                        <Button fx:id="btnAddNewCourseConfirm" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addNewCourseSetStudents" prefHeight="29.0" prefWidth="90.0" text="Confirm" translateX="300.0">
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="15.0" />
+                     </font></Button>
+                    </HBox>
+                </VBox>
+                <VBox fx:id="vboxAddNewCourseStudents" prefHeight="200.0" prefWidth="100.0" visible="false">
+                    <Label layoutX="-20.0" prefHeight="30.0" prefWidth="306.0" text="Search students to enroll to course:" translateX="20.0">
+                  <padding>
+                     <Insets top="5.0" />
+                  </padding>
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="15.0" />
+                  </font></Label>
+                    <TextField fx:id="txtfieldAddNewCourseSearchStudent" maxWidth="500.0" prefHeight="27.0" prefWidth="500.0" promptText="Search a student..." translateX="20.0">
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin></TextField>
+                    <ListView fx:id="listviewAddNewCourseSearchStudent" maxWidth="500.0" prefHeight="150.0" prefWidth="200.0" translateX="20.0" />
+                    <Label prefHeight="17.0" prefWidth="220.0" text="Selected Students" translateX="20.0">
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+                  <font>
+                     <Font size="15.0" />
+                  </font></Label>
+                    <ListView fx:id="listviewAddNewCourseSelectedStudents" maxWidth="500.0" prefHeight="150.0" prefWidth="400.0" translateX="20.0">
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin></ListView>
+                    <Button fx:id="btnAddNewCourseStudentConfirm" alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="70.0" text="Confirm" textAlignment="CENTER" translateX="310.0">
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin></Button>
+                </VBox>
+                <VBox fx:id="vboxAddNewCourseSchedule" disable="true" prefHeight="200.0" prefWidth="814.0" visible="false">
+                    <Label text="Common Free Hours" translateX="20.0">
+                  <VBox.margin>
+                     <Insets top="10.0" />
+                  </VBox.margin>
+                  <padding>
+                     <Insets top="10.0" />
+                  </padding>
+                  <font>
+                     <Font size="15.0" />
+                  </font></Label>
+                    <GridPane fx:id="gridpaneAddNewCourseSchedule" alignment="CENTER" gridLinesVisible="true" maxWidth="700.0" prefHeight="400.0" prefWidth="700.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        </rowConstraints>
+                        <Label alignment="CENTER" contentDisplay="CENTER" text="Monday" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="Tuesday" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="Wednesday" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="Thursday" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="Friday" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="Saturday" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="Sunday" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label text="08:30" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Label text="09:25" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Label text="10:20" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Label text="11:15" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Label text="12:10" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Label text="13:05" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Label text="14:00" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Label text="14:55" GridPane.halignment="CENTER" GridPane.rowIndex="8" />
+                        <Label text="15:50" GridPane.halignment="CENTER" GridPane.rowIndex="9" />
+                        <Label text="16:45" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
+                        <Label text="17:40" GridPane.halignment="CENTER" GridPane.rowIndex="11" />
+                        <Label text="18:35" GridPane.halignment="CENTER" GridPane.rowIndex="12" />
+                        <Label text="19:30" GridPane.halignment="CENTER" GridPane.rowIndex="13" />
+                        <Label text="20:25" GridPane.halignment="CENTER" GridPane.rowIndex="14" />
+                        <Label prefHeight="17.0" prefWidth="26.0" text="21:20" GridPane.halignment="CENTER" GridPane.rowIndex="15" />
+                        <Label text="22:15" GridPane.halignment="CENTER" GridPane.rowIndex="16" />
+                  <VBox.margin>
+                     <Insets left="50.0" top="20.0" />
+                  </VBox.margin>
+                    </GridPane>
+                    <HBox prefHeight="100.0" prefWidth="200.0">
+                        <Label text="Select the day, the start hour and the duration of the course" translateX="20.0">
+                     <HBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </HBox.margin>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                     <font>
+                        <Font size="15.0" />
+                     </font></Label>
+                    </HBox>
+                    <HBox prefHeight="100.0" prefWidth="200.0">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Day:" translateX="20.0" translateY="5.0" wrappingWidth="58.21630859375">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                        <ChoiceBox fx:id="choiceboxAddNewCourseDay" prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin></ChoiceBox>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Starting Hour:" translateX="20.0" translateY="5.0" wrappingWidth="110.21630859375">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                  </Text>
+                        <ChoiceBox fx:id="choiceboxAddNewCourseHour" accessibleText="Starting Hour" prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin></ChoiceBox>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Duration (Hours):" translateX="10.0" translateY="5.0" wrappingWidth="120.21630859375">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Text>
+                        <ChoiceBox fx:id="choiceboxAddNewCourseDuration" accessibleText="Hours" prefWidth="150.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin></ChoiceBox>
+                    </HBox>
+                    <Button fx:id="btnAddNewCourseScheduleConfirm" mnemonicParsing="false" text="Confirm" translateX="350.0" />
+                </VBox>
             </StackPane>
 
 

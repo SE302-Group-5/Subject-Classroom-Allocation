@@ -263,6 +263,7 @@ public class MainController {
         choiceboxAddNewCourseDay.setValue("");
         choiceboxAddNewCourseHour.setValue("");
 
+
         if (choiceboxAddNewCourseDay.getItems().size() > 0) {
             choiceboxAddNewCourseDay.getItems().clear();
 
@@ -285,7 +286,7 @@ public class MainController {
         for (int day = 0; day < 7; day++) {
             for (int hour = 0; hour < 16; hour++) {
                 if (!commonSchedule.getWeeklyProgram()[day][hour].equals("N")) {
-                    Label label = new Label("Available");
+                    Label label = new Label("    Available");
                     gridpaneAddNewCourseSchedule.add(label, day + 1, hour + 1);
                     //   System.out.println(day + " " + hour);
                 }
