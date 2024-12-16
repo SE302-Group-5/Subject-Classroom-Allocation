@@ -451,6 +451,16 @@ public class DatabaseManager {
 
     public void updateSchedule(String tableName, String course, int day, int startHour, int duration) {
 
+        try {
+            if(databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            System.err.println("we might need to check if the connection to db is closed in each method");
+            System.err.println("in updateSchedule() method");
+        }
+
         StringBuilder query = new StringBuilder("UPDATE " + tableName + " SET day =?");
         for (int i = startHour; i < duration + startHour; i++) {
             query.append(",hour" + i + "=?");
@@ -469,7 +479,8 @@ public class DatabaseManager {
             System.out.println("Updated Schedule of:" + tableName);
 
         } catch (SQLException e) {
-            //  e.printStackTrace();
+            System.err.println("Error with updating the schedule of: " + tableName);
+            //    e.printStackTrace();
         }
 
     }
@@ -832,5 +843,43 @@ public class DatabaseManager {
             return null;
         }
         return null;
+    }
+    public void addStudentToCourse(String student, Course course) {
+        String sqlInsert = "INSERT INTO " + course.getCourseName() + "(student) " +
+                "values (?)";
+        try {
+            var pstmt = databaseConnection.prepareStatement(sqlInsert);
+            pstmt.setString(1, student);
+            pstmt.executeUpdate();
+            System.out.println("Added to Courses table: " + course.getCourseName());
+
+        } catch (SQLException e) {
+            //   e.printStackTrace();
+            System.err.println("Error with table insertion, table: " + course);
+            e.printStackTrace();
+
+        }
+        updateSchedule(student, course.getCourseName(), course.getDay(), course.getStartHour(), course.getDuration());
+
+    }
+
+    public void withdrawStudentFromCourse(String student, Course course) {
+        String sqlDelete = "DELETE FROM " + course.getCourseName() + " WHERE student=? ";
+
+        try (var conn = databaseConnection;
+
+
+             var pstmt = conn.prepareStatement(sqlDelete)){
+
+            pstmt.setString(1, student);
+
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        } catch(SQLException e){
+            System.err.println("Error with deleting studing from table: " + course);
+        }
+        updateSchedule(student, "", course.getDay(), course.getStartHour(), course.getDuration());
+
     }
 }
