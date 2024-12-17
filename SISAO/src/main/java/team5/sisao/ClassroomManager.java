@@ -22,5 +22,19 @@ public class ClassroomManager {
         return available;
     }
 
+    public ArrayList<Classroom> getClassrooms() {
+        return classrooms;
+    }
 
+    public int getCapacity(String classroom) {
+        int retval = 0;
+
+        for (Classroom c : classrooms) {
+            if (c.getClassroomName().equalsIgnoreCase(classroom)) {
+                retval = c.getCapacity();
+                break;
+            }
+        }
+        return retval;
+    }
 }
