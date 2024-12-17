@@ -38,8 +38,8 @@
         <HBox prefHeight="421.0" prefWidth="800.0">
 
             <!-- VBox for Action Buttons (Left Section) -->
-            <VBox fx:id="vboxLeftMain" maxHeight="514.0" minHeight="500.0" prefHeight="514.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
-                <Accordion>
+            <VBox fx:id="vboxLeftMain" maxHeight="600.0" minHeight="600.0" prefHeight="600.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
+                <Accordion translateY="30.0">
                     <panes>
                         <TitledPane animated="false" text="View">
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -75,14 +75,14 @@
                     </panes>
                 </Accordion>
 
-                <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help">
+                <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help" translateY="100.0">
                <font>
                   <Font size="15.0" />
                </font></Button>
             </VBox>
             <StackPane prefHeight="477.0" prefWidth="814.0">
                 <VBox fx:id="vboxViewCourses" prefHeight="421.0" prefWidth="587.0" visible="false">
-                    <TextArea fx:id="textAreaCourses" accessibleRole="TEXT" disable="true" editable="false" focusTraversable="false" maxHeight="30.0" maxWidth="790.0" minHeight="30.0" prefHeight="30.0" prefWidth="700.0" translateX="10.0" visible="false" wrapText="true">
+                    <TextArea fx:id="textAreaCourses" accessibleRole="TEXT" disable="true" editable="false" focusTraversable="false" maxHeight="30.0" maxWidth="790.0" minHeight="30.0" prefHeight="30.0" prefWidth="700.0" translateX="10.0" translateY="40.0" visible="false" wrapText="true">
                         <font>
                             <Font size="15.0" />
                         </font>
@@ -90,7 +90,7 @@
                      <Insets top="10.0" />
                   </VBox.margin>
                     </TextArea>
-                    <TableView fx:id="tableViewCourses" fixedCellSize="0.0" layoutX="100" layoutY="100" maxWidth="790.0" minWidth="700.0" prefHeight="446.0" prefWidth="771.0" translateX="10.0" visible="false">
+                    <TableView fx:id="tableViewCourses" fixedCellSize="0.0" layoutX="100" layoutY="100" maxWidth="790.0" minWidth="689.0" prefHeight="446.0" prefWidth="500.0" translateX="10.0" translateY="40.0" visible="false">
                         <columns>
                             <TableColumn fx:id="columnCourseName" prefWidth="150" text="Course Name" />
                             <TableColumn fx:id="columnStartHour" prefWidth="100" text="Start Hour" />
@@ -103,6 +103,26 @@
                   <VBox.margin>
                      <Insets />
                   </VBox.margin>
+                    </TableView>
+                </VBox>
+                <VBox fx:id="vboxViewClassrooms" prefHeight="421.0" prefWidth="587.0" visible="false">
+                    <TextArea fx:id="textAreaClassrooms" accessibleRole="TEXT" disable="true" editable="false" focusTraversable="false" maxHeight="30.0" maxWidth="450.0" minHeight="30.0" prefHeight="30.0" prefWidth="450.0" translateX="150.0" translateY="40.0" visible="false" wrapText="true">
+                        <font>
+                            <Font size="15.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets top="10.0" />
+                        </VBox.margin>
+                    </TextArea>
+                    <TableView fx:id="tableViewClassrooms" fixedCellSize="0.0" layoutX="100" layoutY="100" maxWidth="450.0" minWidth="450.0" prefHeight="446.0" prefWidth="450.0" translateX="150.0" translateY="40.0" visible="false">
+                        <columns>
+                            <TableColumn fx:id="columnClassroomName" prefWidth="150" text="Classroom Name" />
+                            <TableColumn fx:id="columnCapacity" prefWidth="150" text="Capacity" />
+                            <TableColumn fx:id="columnSchedule" prefWidth="150" text="Schedule" />
+                        </columns>
+                        <VBox.margin>
+                            <Insets />
+                        </VBox.margin>
                     </TableView>
                 </VBox>
                 <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" translateX="10.0" visible="false">

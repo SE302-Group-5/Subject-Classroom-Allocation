@@ -15,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -45,35 +44,33 @@ public class MainController {
     private ArrayList<String> courseEnrollment;
 
     @FXML
-    private VBox vboxMain, vboxLeftMain, vboxViewCourses;
+    private VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms;
     //Buttons
     @FXML
     private Button btnViewClassrooms, btnViewStudents, btnViewCourses;
     @FXML
     private Button btnHelp;
     @FXML
-    private TextArea textAreaCourses;
+    private TextArea textAreaCourses, textAreaClassrooms;
     @FXML
     private TableView<Course> tableViewCourses;
     @FXML
-    private TableColumn<Course, String> columnCourseName;
+    private TableView<Classroom> tableViewClassrooms;
     @FXML
-    private TableColumn<Course, Integer> columnStartHour;
+    private TableColumn<Course, String> columnCourseName, columnLecturer, columnDay, columnClassroom;
     @FXML
-    private TableColumn<Course, Integer> columnDuration;
+    private TableColumn<Course, Integer> columnStartHour, columnDuration, columnAttendees;
     @FXML
-    private TableColumn<Course, String> columnLecturer;
+    private TableColumn<Classroom, String> columnClassroomName;
     @FXML
-    private TableColumn<Course, String> columnDay;
-    @FXML
-    private TableColumn<Course, String> columnClassroom;
-    @FXML
-    private TableColumn<Course, Integer> columnAttendees;
+    private TableColumn<Classroom, Integer> columnCapacity;
+
 
     private ArrayList<VBox> vboxList = new ArrayList<>();
-
+    private ArrayList<Classroom> classroomsList = new ArrayList<>();
     private ArrayList<Course> coursesList = new ArrayList<>();
     private ObservableList<Course> observableCoursesList;
+    private ObservableList<Classroom> observableClassroomsList;
 
     private DatabaseManager db;
 
@@ -91,7 +88,7 @@ public class MainController {
         // could be stupid
         // These vboxes are stored in a stackpane in FXML so they are on top of each other
         vboxList.add(vboxViewCourses);
-
+        vboxList.add(vboxViewClassrooms);
         vboxList.add(vboxAddNewCourse);
         vboxList.add(vboxAddNewCourseStudents);
         vboxList.add(vboxAddNewCourseSchedule);
@@ -116,7 +113,24 @@ public class MainController {
 
     //View methods
     public void ViewClassrooms() {
+        disableAllVboxes();
+        enableVbox(vboxViewClassrooms);
+        // Above part this necessary for all the vboxes that will be visible or invisible
+        // according to user input
         System.out.println("Classrooms button clicked");
+
+        classroomsList = this.db.getClassrooms();
+        observableClassroomsList = observableArrayList(classroomsList);
+        // Bind the ObservableList to the TableView
+        tableViewClassrooms.setItems(observableClassroomsList);
+
+        //Make the TextArea and TableView visible
+        textAreaClassrooms.setVisible(true);
+        tableViewClassrooms.setVisible(true);
+        textAreaClassrooms.setText("Here is the list of available courses:");
+        //lists all available courses thats retrieved from the database in tableview
+        setTableViewClassrooms();
+
     }
 
     public void ViewStudents() {
@@ -128,7 +142,6 @@ public class MainController {
         enableVbox(vboxViewCourses);
         // Above part this necessary for all the vboxes that will be visible or invisible
         // according to user input
-
         System.out.println("Courses button clicked");
         coursesList = this.db.getCourses();
         observableCoursesList = observableArrayList(coursesList);
@@ -156,6 +169,14 @@ public class MainController {
         columnLecturer.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLecturer()));
         columnDay.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDayString()));
         columnClassroom.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClassroom()));
+    }
+
+    //sets the table of courses as TableView
+    public void setTableViewClassrooms() {
+        // Set up the columns to display data
+        columnClassroomName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClassroomName()));
+        columnCapacity.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCapacity()).asObject());
+
     }
 
     public void addNewCourseSetNameAndLecturer() {
@@ -420,21 +441,4 @@ public class MainController {
 
     }
 
-
-    //Class to change the current pane
-//retrieves corresponding FXML doc
-//e.g. classroomAdd.fxml
-    class SceneSwitcher {
-
-        public static void switchScene(String fxmlFile) {
-            try {
-                Stage stage = Main.getPrimaryStage();
-                Parent root = FXMLLoader.load(SceneSwitcher.class.getResource("/team5/sisao/main.fxml" + fxmlFile));
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
