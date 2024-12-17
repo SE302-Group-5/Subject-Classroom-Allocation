@@ -702,7 +702,10 @@ public class MainController {
         {
             if (listviewWithdrawStudentSearch.getItems().size() > 0) {
                 String selectedItem = listviewWithdrawStudentSearch.getSelectionModel().getSelectedItem();
-                WithdrawStudentselectedStudents.add(selectedItem);
+                if (!WithdrawStudentselectedStudents.contains(selectedItem)) {
+                    WithdrawStudentselectedStudents.add(selectedItem);
+                }
+
             }
         });
 
