@@ -54,6 +54,18 @@ public class MainController {
     private Course addStudentCourse;
     private Classroom addStudentClassroom;
     private int addStudentClassroomCapacity;
+    // WITDRAW STUDENT FROM COURSE
+    @FXML
+    public VBox vboxWithdrawStudent;
+    public TextField txtfieldWithdrawStudentSearch;
+    public ChoiceBox<String> choiceboxWithdrawStudentCourse;
+    public ListView<String> listviewWithdrawStudentSelected;
+    public ListView<String> listviewWithdrawStudentSearch;
+    public Button btnWithdrawStudent;
+    public Button btnWithdrawStudentConfirm;
+    private ObservableList<String> withdrawStudentEnrollment;
+    private Course withdrawStudentCourse;
+    private Classroom withdrawStudentClassroom;
 
 
     @FXML
@@ -109,6 +121,7 @@ public class MainController {
         vboxList.add(vboxAddNewCourseStudents);
         vboxList.add(vboxAddNewCourseSchedule);
         vboxList.add(vboxAddStudent);
+        vboxList.add(vboxWithdrawStudent);
         disableAllVboxes();
     }
 
@@ -455,7 +468,7 @@ public class MainController {
         if (listviewAddStudentSelected.getItems().size() > 0) {
             listviewAddStudentSelected.getItems().clear();
         }
-        if(!txtfieldAddStudentSearch.getText().isEmpty()){
+        if (!txtfieldAddStudentSearch.getText().isEmpty()) {
             txtfieldAddStudentSearch.clear();
         }
         ArrayList<Course> courses = db.getCourses();
@@ -493,7 +506,7 @@ public class MainController {
                 for (String student : addStudentNotEnrolled) {
                     if (!db.isAvailable(student, addStudentCourse.getDay(), addStudentCourse.getStartHour(), addStudentCourse.getDuration())) {
                         addStudentNotEnrolledAvailable.remove(student);
-                  //            System.out.println("REMOVED: " + student);
+                        //            System.out.println("REMOVED: " + student);
                     }
                 }
                 addStudentNotEnrolled = observableArrayList(addStudentNotEnrolledAvailable);
@@ -503,7 +516,7 @@ public class MainController {
         });
 
         ObservableList<String> AddStudentselectedStudents = observableArrayList();
-        txtfieldAddNewCourseSearchStudent.clear();
+        txtfieldAddStudentSearch.clear();
 
         txtfieldAddStudentSearch.textProperty().
 
@@ -574,6 +587,111 @@ public class MainController {
             }
 
 
+        });
+
+
+    }
+
+    public void withdrawStudent() {
+        disableAllVboxes();
+        enableVbox(vboxWithdrawStudent);
+
+        choiceboxWithdrawStudentCourse.setValue("");
+        if (choiceboxWithdrawStudentCourse.getItems().size() > 0) {
+            choiceboxWithdrawStudentCourse.getItems().clear();
+
+        }
+        if (listviewWithdrawStudentSearch.getItems().size() > 0) {
+            listviewWithdrawStudentSearch.getItems().clear();
+        }
+        if (listviewWithdrawStudentSelected.getItems().size() > 0) {
+            listviewWithdrawStudentSelected.getItems().clear();
+        }
+        if (!txtfieldWithdrawStudentSearch.getText().isEmpty()) {
+            txtfieldWithdrawStudentSearch.clear();
+        }
+        ArrayList<Course> courses = db.getCourses();
+
+
+        ArrayList<String> courseNames = new ArrayList<>(courses.size());
+        for (Course c : courses) {
+            if (db.getEnrollmentCount(c.getCourseName()) > 0) {
+                courseNames.add(c.getCourseName());
+            }
+
+        }
+        choiceboxWithdrawStudentCourse.getItems().addAll(courseNames);
+
+        choiceboxWithdrawStudentCourse.setOnAction(event -> {
+            if (!choiceboxWithdrawStudentCourse.getValue().isBlank()) {
+
+                if (listviewWithdrawStudentSearch.getItems().size() > 0) {
+                    listviewWithdrawStudentSearch.getItems().clear();
+                }
+                if (listviewWithdrawStudentSelected.getItems().size() > 0) {
+                    listviewWithdrawStudentSelected.getItems().clear();
+                }
+                withdrawStudentCourse = db.getCourse(choiceboxWithdrawStudentCourse.getValue());
+
+                withdrawStudentEnrollment = observableArrayList(db.getEnrollment(withdrawStudentCourse.getCourseName()));
+                withdrawStudentClassroom = db.getClassroom(withdrawStudentCourse.getClassroom());
+
+            }
+
+        });
+
+        ObservableList<String> WithdrawStudentselectedStudents = observableArrayList();
+        txtfieldWithdrawStudentSearch.clear();
+
+        txtfieldWithdrawStudentSearch.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            //       System.out.println("Search text changed: " + newValue);  // Debug line
+            if (!choiceboxWithdrawStudentCourse.getValue().isBlank()) {
+                ObservableList<String> filteredItems = observableArrayList();
+                if (!newValue.isBlank()) {
+                    for (String item : withdrawStudentEnrollment) {
+                        if (item.toLowerCase().contains(newValue.toLowerCase())) {
+                            filteredItems.add(item);
+                        }
+                    }
+                } else {
+                    // If search is empty, show all students
+                    filteredItems.setAll(withdrawStudentEnrollment);
+                }
+                listviewWithdrawStudentSearch.setItems(filteredItems);
+                listviewWithdrawStudentSelected.setItems(WithdrawStudentselectedStudents);
+            }
+
+        });
+
+        listviewWithdrawStudentSearch.setOnMouseClicked(event ->
+
+        {
+            if (listviewWithdrawStudentSearch.getItems().size() > 0) {
+                String selectedItem = listviewWithdrawStudentSearch.getSelectionModel().getSelectedItem();
+                WithdrawStudentselectedStudents.add(selectedItem);
+            }
+        });
+
+        listviewWithdrawStudentSelected.setOnMouseClicked(event ->
+        {
+            String selectedItem = listviewWithdrawStudentSelected.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                WithdrawStudentselectedStudents.remove(selectedItem);
+            }
+        });
+
+        btnWithdrawStudentConfirm.setOnAction(event ->
+
+        {
+            if (WithdrawStudentselectedStudents.size() > 0) {
+
+                for (String student : WithdrawStudentselectedStudents) {
+                    db.withdrawStudentFromCourse(student, withdrawStudentCourse);
+                }
+
+                withdrawStudent();
+            }
         });
 
 
