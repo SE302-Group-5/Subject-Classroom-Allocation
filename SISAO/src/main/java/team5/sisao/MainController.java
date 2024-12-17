@@ -69,18 +69,20 @@ public class MainController {
 
 
     @FXML
-    private VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms;
+    private VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms, vboxViewStudents;
     //Buttons
     @FXML
     private Button btnViewClassrooms, btnViewStudents, btnViewCourses;
     @FXML
     private Button btnHelp;
     @FXML
-    private TextArea textAreaCourses, textAreaClassrooms;
+    private TextArea textAreaCourses, textAreaClassrooms, textAreaStudents;
     @FXML
     private TableView<Course> tableViewCourses;
     @FXML
     private TableView<Classroom> tableViewClassrooms;
+    @FXML
+    private TableView<String> tableViewStudents;
     @FXML
     private TableColumn<Course, String> columnCourseName, columnLecturer, columnDay, columnClassroom;
     @FXML
@@ -89,13 +91,17 @@ public class MainController {
     private TableColumn<Classroom, String> columnClassroomName;
     @FXML
     private TableColumn<Classroom, Integer> columnCapacity;
+    @FXML
+    private TableColumn<String, String> columnStudentName;
 
 
     private ArrayList<VBox> vboxList = new ArrayList<>();
     private ArrayList<Classroom> classroomsList = new ArrayList<>();
     private ArrayList<Course> coursesList = new ArrayList<>();
+    private ArrayList<String> studentsList = new ArrayList<>();
     private ObservableList<Course> observableCoursesList;
     private ObservableList<Classroom> observableClassroomsList;
+    private ObservableList<String> observableStudentsList;
 
     private DatabaseManager db;
     private static ClassroomManager classroomManager;
@@ -117,6 +123,7 @@ public class MainController {
         // These vboxes are stored in a stackpane in FXML so they are on top of each other
         vboxList.add(vboxViewCourses);
         vboxList.add(vboxViewClassrooms);
+        vboxList.add(vboxViewStudents);
         vboxList.add(vboxAddNewCourse);
         vboxList.add(vboxAddNewCourseStudents);
         vboxList.add(vboxAddNewCourseSchedule);
@@ -158,13 +165,28 @@ public class MainController {
         textAreaClassrooms.setVisible(true);
         tableViewClassrooms.setVisible(true);
         textAreaClassrooms.setText("Here is the list of available courses:");
-        //lists all available courses thats retrieved from the database in tableview
+        //lists all available classrooms thats retrieved from the database in tableview
         setTableViewClassrooms();
 
     }
 
     public void ViewStudents() {
+        disableAllVboxes();
+        enableVbox(vboxViewStudents);
+        // Above part this necessary for all the vboxes that will be visible or invisible
+        // according to user input
         System.out.println("Students button clicked");
+        studentsList = (ArrayList<String>) this.db.getStudents();
+        observableStudentsList = observableArrayList(studentsList);
+        // Bind the ObservableList to the TableView
+        tableViewStudents.setItems(observableStudentsList);
+
+        //Make the TextArea and TableView visible
+        textAreaStudents.setVisible(true);
+        tableViewStudents.setVisible(true);
+        textAreaStudents.setText("Here is the list of all students:");
+        //lists all available students thats retrieved from the database in tableview
+        setTableViewStudents();
     }
 
     public void ViewCourses() {
@@ -201,12 +223,23 @@ public class MainController {
         columnClassroom.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClassroom()));
     }
 
-    //sets the table of courses as TableView
+    //sets the table of classrooms as TableView
     public void setTableViewClassrooms() {
         // Set up the columns to display data
         columnClassroomName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClassroomName()));
         columnCapacity.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCapacity()).asObject());
 
+    }
+
+    //sets the table of students as TableView
+    public void setTableViewStudents() {
+        // Set up the columns to display data
+        columnStudentName.setCellValueFactory(cellData -> new SimpleStringProperty(formatStudentName(cellData.getValue())));
+    }
+
+    private String formatStudentName(String originalName) {
+        // Replace underscores with spaces
+        return originalName.replace("_", " ");
     }
 
     public void addNewCourseSetNameAndLecturer() {
