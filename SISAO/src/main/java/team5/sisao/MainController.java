@@ -669,6 +669,9 @@ public class MainController {
                 withdrawStudentEnrollment = observableArrayList(db.getEnrollment(withdrawStudentCourse.getCourseName()));
                 withdrawStudentClassroom = db.getClassroom(withdrawStudentCourse.getClassroom());
 
+
+                //  listviewAddNewStudentSearch.setItems(withdrawStudentEnrollment);
+                withdrawStudentFillSearchList();
             }
 
         });
@@ -676,11 +679,13 @@ public class MainController {
         ObservableList<String> WithdrawStudentselectedStudents = observableArrayList();
         txtfieldWithdrawStudentSearch.clear();
 
+
         txtfieldWithdrawStudentSearch.textProperty().addListener((observable, oldValue, newValue) ->
         {
             //       System.out.println("Search text changed: " + newValue);  // Debug line
             if (!choiceboxWithdrawStudentCourse.getValue().isBlank()) {
                 ObservableList<String> filteredItems = observableArrayList();
+
                 if (!newValue.isBlank()) {
                     for (String item : withdrawStudentEnrollment) {
                         if (item.toLowerCase().contains(newValue.toLowerCase())) {
@@ -689,7 +694,7 @@ public class MainController {
                     }
                 } else {
                     // If search is empty, show all students
-                    filteredItems.setAll(withdrawStudentEnrollment);
+                    filteredItems.addAll(withdrawStudentEnrollment);
                 }
                 listviewWithdrawStudentSearch.setItems(filteredItems);
                 listviewWithdrawStudentSelected.setItems(WithdrawStudentselectedStudents);
@@ -698,7 +703,6 @@ public class MainController {
         });
 
         listviewWithdrawStudentSearch.setOnMouseClicked(event ->
-
         {
             if (listviewWithdrawStudentSearch.getItems().size() > 0) {
                 String selectedItem = listviewWithdrawStudentSearch.getSelectionModel().getSelectedItem();
@@ -731,6 +735,13 @@ public class MainController {
         });
 
 
+    }
+
+    public void withdrawStudentFillSearchList() {
+        if (listviewWithdrawStudentSearch.getItems().size() > 0) {
+            listviewWithdrawStudentSearch.getItems().clear();
+        }
+        listviewWithdrawStudentSearch.setItems(withdrawStudentEnrollment);
     }
 
     // Other methods to be implemented
