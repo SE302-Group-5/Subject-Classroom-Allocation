@@ -43,7 +43,6 @@ public class Main extends Application {
         DatabaseManager db = new DatabaseManager();
         db.boot();
         System.out.println("DB connection established");
-      //  db.swapClassrooms("Ege Çakıcı", "PHYS100");
         launch(args);
     }
 }
