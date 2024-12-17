@@ -455,7 +455,9 @@ public class MainController {
         if (listviewAddStudentSelected.getItems().size() > 0) {
             listviewAddStudentSelected.getItems().clear();
         }
-
+        if(!txtfieldAddStudentSearch.getText().isEmpty()){
+            txtfieldAddStudentSearch.clear();
+        }
         ArrayList<Course> courses = db.getCourses();
 
 
@@ -466,34 +468,38 @@ public class MainController {
         choiceboxAddStudentCourse.getItems().addAll(courseNames);
 
         choiceboxAddStudentCourse.setOnAction(event -> {
-            if (listviewAddNewStudentSearch.getItems().size() > 0) {
-                listviewAddNewStudentSearch.getItems().clear();
-            }
-            if (listviewAddStudentSelected.getItems().size() > 0) {
-                listviewAddStudentSelected.getItems().clear();
-            }
-            addStudentCourse = db.getCourse(choiceboxAddStudentCourse.getValue());
+            if (!choiceboxAddStudentCourse.getValue().isBlank()) {
 
-            addStudentEnrollment = observableArrayList(db.getEnrollment(addStudentCourse.getCourseName()));
-            addStudentClassroom = db.getClassroom(addStudentCourse.getClassroom());
+                if (listviewAddNewStudentSearch.getItems().size() > 0) {
+                    listviewAddNewStudentSearch.getItems().clear();
+                }
+                if (listviewAddStudentSelected.getItems().size() > 0) {
+                    listviewAddStudentSelected.getItems().clear();
+                }
+                addStudentCourse = db.getCourse(choiceboxAddStudentCourse.getValue());
 
-            addStudentClassroomCapacity = classroomManager.getCapacity(addStudentClassroom.getClassroomName());
-            addStudentNotEnrolled = observableArrayList(db.getStudents());
-            //  System.out.println("classroom capacity for: " + addStudentCourse.getCourseName() + "     " + addStudentClassroomCapacity);
-            for (String student : addStudentEnrollment) {
-                if (addStudentNotEnrolled.contains(student)) {
-                    addStudentNotEnrolled.remove(student);
+                addStudentEnrollment = observableArrayList(db.getEnrollment(addStudentCourse.getCourseName()));
+                addStudentClassroom = db.getClassroom(addStudentCourse.getClassroom());
+
+                addStudentClassroomCapacity = classroomManager.getCapacity(addStudentClassroom.getClassroomName());
+                addStudentNotEnrolled = observableArrayList(db.getStudents());
+                //  System.out.println("classroom capacity for: " + addStudentCourse.getCourseName() + "     " + addStudentClassroomCapacity);
+                for (String student : addStudentEnrollment) {
+                    if (addStudentNotEnrolled.contains(student)) {
+                        addStudentNotEnrolled.remove(student);
+                    }
                 }
-            }
-            ArrayList addStudentNotEnrolledAvailable = new ArrayList<>(addStudentEnrollment);
-            for (String student : addStudentNotEnrolled) {
-                if (!db.isAvailable(student, addStudentCourse.getDay(), addStudentCourse.getStartHour(), addStudentCourse.getDuration())) {
-                    addStudentNotEnrolledAvailable.remove(student);
-              //      System.out.println("REMOVED: " + student);
+                ArrayList<String> addStudentNotEnrolledAvailable = new ArrayList<>(addStudentNotEnrolled);
+                for (String student : addStudentNotEnrolled) {
+                    if (!db.isAvailable(student, addStudentCourse.getDay(), addStudentCourse.getStartHour(), addStudentCourse.getDuration())) {
+                        addStudentNotEnrolledAvailable.remove(student);
+                  //            System.out.println("REMOVED: " + student);
+                    }
                 }
+                addStudentNotEnrolled = observableArrayList(addStudentNotEnrolledAvailable);
+
             }
-            addStudentEnrollment = observableArrayList(addStudentNotEnrolledAvailable);
-            //  System.out.println(AddStudentNotEnrolled.size()+" ZZZZZZZZZZZZZZ");
+
         });
 
         ObservableList<String> AddStudentselectedStudents = observableArrayList();
@@ -563,6 +569,8 @@ public class MainController {
                 for (String student : AddStudentselectedStudents) {
                     db.addStudentToCourse(student, addStudentCourse);
                 }
+
+                addStudent();
             }
 
 
