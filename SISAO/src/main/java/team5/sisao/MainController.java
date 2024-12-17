@@ -15,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -28,9 +27,8 @@ import static javafx.collections.FXCollections.observableArrayList;
 public class MainController {
 
     public ImageView logo;
-    private static ClassroomManager classroomManager;
-    private static CourseManager courseManager;
-    @FXML
+
+    @FXML // ADD NEW COURSE
     public TextField txtfieldAddNewCourseName, txtfieldAddNewCourseLecturer;
     public VBox vboxAddNewCourse, vboxAddNewCourseStudents, vboxAddNewCourseSchedule;
     public TextField txtfieldAddNewCourseSearchStudent;
@@ -43,6 +41,20 @@ public class MainController {
     private String courseName, courseLecturer, courseDay, courseHour;
     private int courseDuration;
     private ArrayList<String> courseEnrollment;
+    // ADD STUDENT TO COURSE
+    @FXML
+    public VBox vboxAddStudent;
+    public TextField txtfieldAddStudentSearch;
+    public ChoiceBox<String> choiceboxAddStudentCourse;
+    public ListView<String> listviewAddStudentSelected;
+    public ListView<String> listviewAddNewStudentSearch;
+    public Button btnAddStudentConfirm;
+    private ObservableList<String> addStudentEnrollment;
+    private ObservableList<String> addStudentNotEnrolled;
+    private Course addStudentCourse;
+    private Classroom addStudentClassroom;
+    private int addStudentClassroomCapacity;
+
 
     @FXML
     private VBox vboxMain, vboxLeftMain, vboxViewCourses;
@@ -76,7 +88,8 @@ public class MainController {
     private ObservableList<Course> observableCoursesList;
 
     private DatabaseManager db;
-
+    private static ClassroomManager classroomManager;
+    private static CourseManager courseManager;
 
     //initializes logo
     public void initialize() {
@@ -84,6 +97,8 @@ public class MainController {
         this.db = new DatabaseManager();
         this.classroomManager = new ClassroomManager(this.db);
         this.courseManager = new CourseManager(this.db);
+
+
         vboxList = new ArrayList<VBox>();
         // Only add the vboxes which you want to disable to the vboxList
         // Never put main vboxes
@@ -95,6 +110,7 @@ public class MainController {
         vboxList.add(vboxAddNewCourse);
         vboxList.add(vboxAddNewCourseStudents);
         vboxList.add(vboxAddNewCourseSchedule);
+        vboxList.add(vboxAddStudent);
         disableAllVboxes();
     }
 
@@ -209,8 +225,6 @@ public class MainController {
             //       System.out.println("Search text changed: " + newValue);  // Debug line
 
             ObservableList<String> filteredItems = observableArrayList();
-
-
             if (!newValue.isBlank()) {
                 for (String item : students) {
                     if (item.toLowerCase().contains(newValue.toLowerCase())) {
@@ -400,6 +414,137 @@ public class MainController {
         } else {
             System.err.println("a course with that name already exists: " + courseName);
         }
+
+
+    }
+
+    public void addStudent() {
+        disableAllVboxes();
+        enableVbox(vboxAddStudent);
+
+        choiceboxAddStudentCourse.setValue("");
+        if (choiceboxAddStudentCourse.getItems().size() > 0) {
+            choiceboxAddStudentCourse.getItems().clear();
+
+        }
+        if (listviewAddNewStudentSearch.getItems().size() > 0) {
+            listviewAddNewStudentSearch.getItems().clear();
+        }
+        if (listviewAddStudentSelected.getItems().size() > 0) {
+            listviewAddStudentSelected.getItems().clear();
+        }
+
+        ArrayList<Course> courses = db.getCourses();
+
+
+        ArrayList<String> courseNames = new ArrayList<>(courses.size());
+        for (Course c : courses) {
+            courseNames.add(c.getCourseName());
+        }
+        choiceboxAddStudentCourse.getItems().addAll(courseNames);
+
+        choiceboxAddStudentCourse.setOnAction(event -> {
+            if (listviewAddNewStudentSearch.getItems().size() > 0) {
+                listviewAddNewStudentSearch.getItems().clear();
+            }
+            if (listviewAddStudentSelected.getItems().size() > 0) {
+                listviewAddStudentSelected.getItems().clear();
+            }
+            addStudentCourse = db.getCourse(choiceboxAddStudentCourse.getValue());
+
+            addStudentEnrollment = observableArrayList(db.getEnrollment(addStudentCourse.getCourseName()));
+            addStudentClassroom = db.getClassroom(addStudentCourse.getClassroom());
+
+            addStudentClassroomCapacity = classroomManager.getCapacity(addStudentClassroom.getClassroomName());
+            addStudentNotEnrolled = observableArrayList(db.getStudents());
+            //  System.out.println("classroom capacity for: " + addStudentCourse.getCourseName() + "     " + addStudentClassroomCapacity);
+            for (String student : addStudentEnrollment) {
+                if (addStudentNotEnrolled.contains(student)) {
+                    addStudentNotEnrolled.remove(student);
+                }
+            }
+            ArrayList addStudentNotEnrolledAvailable = new ArrayList<>(addStudentEnrollment);
+            for (String student : addStudentNotEnrolled) {
+                if (!db.isAvailable(student, addStudentCourse.getDay(), addStudentCourse.getStartHour(), addStudentCourse.getDuration())) {
+                    addStudentNotEnrolledAvailable.remove(student);
+              //      System.out.println("REMOVED: " + student);
+                }
+            }
+            addStudentEnrollment = observableArrayList(addStudentNotEnrolledAvailable);
+            //  System.out.println(AddStudentNotEnrolled.size()+" ZZZZZZZZZZZZZZ");
+        });
+
+        ObservableList<String> AddStudentselectedStudents = observableArrayList();
+        txtfieldAddNewCourseSearchStudent.clear();
+
+        txtfieldAddStudentSearch.textProperty().
+
+                addListener((observable, oldValue, newValue) ->
+
+                {
+                    //       System.out.println("Search text changed: " + newValue);  // Debug line
+                    if (!choiceboxAddStudentCourse.getValue().isBlank()) {
+                        ObservableList<String> filteredItems = observableArrayList();
+                        if (!newValue.isBlank()) {
+                            for (String item : addStudentNotEnrolled) {
+                                if (item.toLowerCase().contains(newValue.toLowerCase())) {
+                                    filteredItems.add(item);
+                                }
+                            }
+                        } else {
+                            // If search is empty, show all students
+                            filteredItems.setAll(addStudentNotEnrolled);
+                        }
+
+                        listviewAddNewStudentSearch.setItems(filteredItems);
+                        listviewAddStudentSelected.setItems(AddStudentselectedStudents);
+                    }
+
+                });
+
+        listviewAddNewStudentSearch.setOnMouseClicked(event ->
+
+        {
+            if (listviewAddNewStudentSearch.getItems().size() > 0) {
+                String selectedItem = listviewAddNewStudentSearch.getSelectionModel().getSelectedItem();
+
+                int addedEnrollment = AddStudentselectedStudents.size() + addStudentEnrollment.size();
+                if (selectedItem != null && !AddStudentselectedStudents.contains(selectedItem) && addedEnrollment <
+                        addStudentClassroomCapacity) {
+
+                    AddStudentselectedStudents.add(selectedItem);
+                } else {
+                    System.err.println("    Not enough capcity in " + addStudentClassroom.getClassroomName());
+                    System.err.print("  classroom capacity: " + addStudentClassroomCapacity);
+                    System.err.print("  Current enrollment " + db.getEnrollmentCount(addStudentCourse.getCourseName()));
+                }
+            }
+
+
+        });
+
+        listviewAddStudentSelected.setOnMouseClicked(event ->
+
+        {
+            String selectedItem = listviewAddStudentSelected.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                AddStudentselectedStudents.remove(selectedItem);
+            }
+        });
+
+        btnAddStudentConfirm.setOnAction(event ->
+
+        {
+
+            if (AddStudentselectedStudents.size() > 0) {
+
+                for (String student : AddStudentselectedStudents) {
+                    db.addStudentToCourse(student, addStudentCourse);
+                }
+            }
+
+
+        });
 
 
     }

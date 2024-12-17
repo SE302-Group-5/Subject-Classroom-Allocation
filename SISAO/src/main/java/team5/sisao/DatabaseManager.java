@@ -851,7 +851,7 @@ public class DatabaseManager {
             var pstmt = databaseConnection.prepareStatement(sqlInsert);
             pstmt.setString(1, student);
             pstmt.executeUpdate();
-            System.out.println("Added to Courses table: " + course.getCourseName());
+            System.out.println("Added to table: " + course.getCourseName());
 
         } catch (SQLException e) {
             //   e.printStackTrace();
