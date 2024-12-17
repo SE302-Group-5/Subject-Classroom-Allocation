@@ -335,7 +335,6 @@ public class DatabaseManager {
         String createStudentsTable =
                 """
                         CREATE TABLE IF NOT EXISTS Students (
-                        studentID INTEGER,
                         studentName text
                         );""";
         try {
@@ -348,8 +347,8 @@ public class DatabaseManager {
         }
 
 
-        String sqlInsert = "INSERT INTO " + "Students" + "(studentID,studentName)" +
-                " values (?,?)";
+        String sqlInsert = "INSERT INTO " + "Students" + "(studentName)" +
+                " values (?)";
 
 
         try {
@@ -358,8 +357,7 @@ public class DatabaseManager {
 
             for (int i = 0; i < students.length; i++) {
 
-                pstmt.setInt(1, i);
-                pstmt.setString(2, students[i].toString());
+                pstmt.setString(1, students[i].toString());
                 pstmt.executeUpdate();
             }
 
