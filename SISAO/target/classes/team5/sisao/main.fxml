@@ -53,9 +53,7 @@
                         </TitledPane>
                         <TitledPane animated="false" text="Delete">
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                <Button fx:id="btnWithdrawStudent" layoutX="7.0" layoutY="14.0"
-                                        onAction="#withdrawStudent" prefHeight="25.0" prefWidth="150.0"
-                                        text="Withdraw Student"/>
+                                <Button fx:id="btnWithdrawStudent" layoutX="7.0" layoutY="14.0" onAction="#withdrawStudent" prefHeight="25.0" prefWidth="150.0" text="Withdraw Student" />
                             </AnchorPane>
                      <font>
                         <Font size="15.0" />
@@ -108,6 +106,34 @@
                   </VBox.margin>
                     </TableView>
                 </VBox>
+
+                <VBox fx:id="vboxViewCourseAttendance" prefHeight="421.0" prefWidth="587.0" visible="false">
+                    <Button fx:id="btnAttendanceGoBack" mnemonicParsing="false" prefWidth="100.0" text="&lt;- Go Back" translateX="30.0" translateY="30.0">
+                        <font>
+                            <Font size="15.0" />
+                        </font>
+                    </Button>
+                    <Label fx:id="labelCourseAttendance" prefHeight="29.0" prefWidth="377.0" text=" " translateX="40.0" translateY="20.0">
+                        <font>
+                            <Font size="15.0" />
+                        </font>
+                        <VBox.margin>
+                            <Insets top="20.0" />
+                        </VBox.margin>
+                        <padding>
+                            <Insets top="10.0" />
+                        </padding>
+                    </Label>
+                    <TableView fx:id="tableViewCourseAttendance" fixedCellSize="0.0" layoutX="100" layoutY="100" maxWidth="450.0" minWidth="450.0" prefHeight="446.0" prefWidth="450.0" translateX="180.0" translateY="40.0" visible="false">
+                        <columns>
+                            <TableColumn fx:id="columnScheduleStudentName" prefWidth="450" text="Enrolled Students" />
+                        </columns>
+                        <VBox.margin>
+                            <Insets />
+                        </VBox.margin>
+                    </TableView>
+                </VBox>
+
                 <VBox fx:id="vboxViewClassrooms" prefHeight="421.0" prefWidth="587.0" visible="false">
                     <TextArea fx:id="textAreaClassrooms" accessibleRole="TEXT" disable="true" editable="false" focusTraversable="false" maxHeight="30.0" maxWidth="450.0" minHeight="30.0" prefHeight="30.0" prefWidth="450.0" translateX="150.0" translateY="40.0" visible="false" wrapText="true">
                         <font>
@@ -129,7 +155,7 @@
                 </VBox>
 
                 <VBox fx:id="vboxViewClassroomSchedule" prefHeight="421.0" prefWidth="587.0" visible="false">
-                    <Button fx:id = "btnClassroomGoBack" mnemonicParsing="false" prefWidth="100.0" text="&lt;- Go Back" translateX="30.0" translateY="30.0">
+                    <Button fx:id="btnClassroomGoBack" mnemonicParsing="false" prefWidth="100.0" text="&lt;- Go Back" translateX="30.0" translateY="30.0">
                         <font>
                             <Font size="15.0" />
                         </font>
@@ -224,7 +250,7 @@
                 </VBox>
 
                 <VBox fx:id="vboxViewStudentSchedule" prefHeight="421.0" prefWidth="587.0" visible="false">
-               <Button fx:id = "btnStudentGoBack" mnemonicParsing="false" prefWidth="100.0" text="&lt;- Go Back" translateX="30.0" translateY="30.0">
+               <Button fx:id="btnStudentGoBack" mnemonicParsing="false" prefWidth="100.0" text="&lt;- Go Back" translateX="30.0" translateY="30.0">
                   <font>
                      <Font size="15.0" />
                   </font>
@@ -300,7 +326,7 @@
                 </VBox>
 
                 <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" translateX="10.0" visible="false">
-                    <Label prefWidth="220.0" text="Course Name" translateX="40.0">
+                    <Label prefWidth="220.0" text="Course Name" translateX="40.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="20.0" />
                   </VBox.margin>
@@ -310,14 +336,14 @@
                   <font>
                      <Font size="15.0" />
                   </font></Label>
-                    <TextField fx:id="txtfieldAddNewCourseName" maxWidth="500.0" prefWidth="500.0" promptText="Enter Course Name Here..." translateX="40.0">
+                    <TextField fx:id="txtfieldAddNewCourseName" maxWidth="500.0" prefWidth="500.0" promptText="Enter Course Name Here..." translateX="40.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="5.0" />
                   </VBox.margin>
                   <font>
                      <Font size="15.0" />
                   </font></TextField>
-                    <Label prefWidth="220.0" text="Lecturer" translateX="40.0">
+                    <Label prefWidth="220.0" text="Lecturer" translateX="40.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin>
@@ -327,7 +353,7 @@
                   <font>
                      <Font size="15.0" />
                   </font></Label>
-                    <TextField fx:id="txtfieldAddNewCourseLecturer" maxWidth="500.0" prefWidth="500.0" promptText="Enter Lecturer Here..." translateX="40.0">
+                    <TextField fx:id="txtfieldAddNewCourseLecturer" maxWidth="500.0" prefWidth="500.0" promptText="Enter Lecturer Here..." translateX="40.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="5.0" />
                   </VBox.margin>
@@ -335,7 +361,7 @@
                      <Font size="15.0" />
                   </font></TextField>
                     <HBox prefHeight="31.0" prefWidth="814.0">
-                        <Button fx:id="btnAddNewCourseConfirm" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addNewCourseSetStudents" prefHeight="29.0" prefWidth="90.0" text="Confirm" translateX="300.0">
+                        <Button fx:id="btnAddNewCourseConfirm" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addNewCourseSetStudents" prefHeight="29.0" prefWidth="90.0" text="Confirm" translateX="300.0" translateY="100.0">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
@@ -345,7 +371,7 @@
                     </HBox>
                 </VBox>
                 <VBox fx:id="vboxAddNewCourseStudents" prefHeight="200.0" prefWidth="100.0" visible="false">
-                    <Label layoutX="-20.0" prefHeight="30.0" prefWidth="306.0" text="Search students to enroll to course:" translateX="20.0">
+                    <Label layoutX="-20.0" prefHeight="30.0" prefWidth="306.0" text="Search Students To Enroll to Course:" translateX="150.0" translateY="20.0">
                   <padding>
                      <Insets top="5.0" />
                   </padding>
@@ -355,15 +381,15 @@
                   <font>
                      <Font size="15.0" />
                   </font></Label>
-                    <TextField fx:id="txtfieldAddNewCourseSearchStudent" maxWidth="500.0" prefHeight="27.0" prefWidth="500.0" promptText="Search a student..." translateX="20.0">
+                    <TextField fx:id="txtfieldAddNewCourseSearchStudent" maxWidth="500.0" prefHeight="27.0" prefWidth="500.0" promptText="Search a student..." translateX="150.0" translateY="20.0">
                   <padding>
                      <Insets top="10.0" />
                   </padding>
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin></TextField>
-                    <ListView fx:id="listviewAddNewCourseSearchStudent" maxWidth="500.0" prefHeight="150.0" prefWidth="200.0" translateX="20.0" />
-                    <Label prefHeight="17.0" prefWidth="220.0" text="Selected Students" translateX="20.0">
+                    <ListView fx:id="listviewAddNewCourseSearchStudent" maxWidth="500.0" prefHeight="150.0" prefWidth="200.0" translateX="150.0" translateY="20.0" />
+                    <Label prefHeight="17.0" prefWidth="220.0" text="Selected Students:" translateX="150.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin>
@@ -373,11 +399,11 @@
                   <font>
                      <Font size="15.0" />
                   </font></Label>
-                    <ListView fx:id="listviewAddNewCourseSelectedStudents" maxWidth="500.0" prefHeight="150.0" prefWidth="400.0" translateX="20.0">
+                    <ListView fx:id="listviewAddNewCourseSelectedStudents" maxWidth="500.0" prefHeight="150.0" prefWidth="400.0" translateX="150.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin></ListView>
-                    <Button fx:id="btnAddNewCourseStudentConfirm" alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="70.0" text="Confirm" textAlignment="CENTER" translateX="310.0">
+                    <Button fx:id="btnAddNewCourseStudentConfirm" alignment="BOTTOM_CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="70.0" text="Confirm" textAlignment="CENTER" translateX="350.0" translateY="30.0">
                   <VBox.margin>
                      <Insets top="10.0" />
                   </VBox.margin></Button>
@@ -444,7 +470,7 @@
                         <Label text="18:35" GridPane.halignment="CENTER" GridPane.rowIndex="12" />
                         <Label text="19:30" GridPane.halignment="CENTER" GridPane.rowIndex="13" />
                         <Label text="20:25" GridPane.halignment="CENTER" GridPane.rowIndex="14" />
-                        <Label prefHeight="17.0" prefWidth="26.0" text="21:20" GridPane.halignment="CENTER" GridPane.rowIndex="15" />
+                        <Label text="21:20" GridPane.halignment="CENTER" GridPane.rowIndex="15" />
                         <Label text="22:15" GridPane.halignment="CENTER" GridPane.rowIndex="16" />
                   <VBox.margin>
                      <Insets left="50.0" top="20.0" />
@@ -494,61 +520,64 @@
                         <Insets left="10.0" />
                      </HBox.margin></ChoiceBox>
                     </HBox>
-                    <Button fx:id="btnAddNewCourseScheduleConfirm" mnemonicParsing="false" text="Confirm" translateX="350.0" />
+                    <Button fx:id="btnAddNewCourseScheduleConfirm" mnemonicParsing="false" text="Confirm" translateX="350.0" translateY="-30.0" />
                 </VBox>
                 <VBox fx:id="vboxAddStudent" disable="true" prefHeight="200.0" prefWidth="100.0" visible="false">
                     <HBox prefHeight="33.0" prefWidth="814.0" translateY="10.0">
-                        <Label text="Choose the Course: ">
+                        <Label prefHeight="36.0" prefWidth="128.0" text="Choose the Course: " translateX="30.0" translateY="30.0">
                             <font>
-                                <Font size="15.0"/>
+                                <Font size="15.0" />
                             </font>
                         </Label>
-                        <ChoiceBox fx:id="choiceboxAddStudentCourse" prefWidth="150.0" translateX="15.0"/>
+                        <ChoiceBox fx:id="choiceboxAddStudentCourse" prefWidth="150.0" translateX="40.0" translateY="30.0">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin></ChoiceBox>
                     </HBox>
-                    <Label text="Search a Student: " translateY="20.0">
+                    <Label prefHeight="19.0" prefWidth="207.0" text="Search a Student: " translateX="30.0" translateY="100.0">
                         <font>
-                            <Font size="14.0"/>
+                            <Font size="15.0" />
                         </font>
                     </Label>
-                    <TextField fx:id="txtfieldAddStudentSearch" translateY="25.0"/>
-                    <ListView fx:id="listviewAddNewStudentSearch" prefHeight="163.0" prefWidth="814.0"
-                              translateY="25.0"/>
-                    <Label text="These students will be added to the course:" translateY="30.0">
+                    <TextField fx:id="txtfieldAddStudentSearch" maxWidth="350.0" prefWidth="300.0" translateX="30.0" translateY="110.0">
+                  <font>
+                     <Font size="15.0" />
+                  </font></TextField>
+                    <ListView fx:id="listviewAddNewStudentSearch" maxHeight="250.0" maxWidth="350.0" prefHeight="250.0" prefWidth="814.0" translateX="30.0" translateY="110.0" />
+                    <Label text="These Students Will Be Added To The Course:" translateX="410.0" translateY="-170.0">
                         <font>
-                            <Font size="14.0"/>
+                            <Font size="15.0" />
                         </font>
                     </Label>
-                    <ListView fx:id="listviewAddStudentSelected" prefHeight="159.0" prefWidth="814.0"
-                              translateY="30.0"/>
-                    <Button fx:id="btnAddStudentConfirm" mnemonicParsing="false" text="Confirm" translateX="360.0"
-                            translateY="60.0"/>
+                    <ListView fx:id="listviewAddStudentSelected" maxHeight="300.0" maxWidth="350.0" prefHeight="280.0" prefWidth="814.0" translateX="410.0" translateY="-165.0" />
+                    <Button fx:id="btnAddStudentConfirm" mnemonicParsing="false" text="Confirm" translateX="360.0" translateY="-80.0">
+                  <font>
+                     <Font size="15.0" />
+                  </font></Button>
                 </VBox>
                 <VBox fx:id="vboxWithdrawStudent" disable="true" prefHeight="200.0" prefWidth="100.0" visible="false">
                     <HBox prefHeight="33.0" prefWidth="814.0" translateY="10.0">
                         <Label text="Choose the Course: ">
                             <font>
-                                <Font size="15.0"/>
+                                <Font size="15.0" />
                             </font>
                         </Label>
-                        <ChoiceBox fx:id="choiceboxWithdrawStudentCourse" prefWidth="150.0" translateX="15.0"/>
+                        <ChoiceBox fx:id="choiceboxWithdrawStudentCourse" prefWidth="150.0" translateX="15.0" />
                     </HBox>
                     <Label text="Search a Student: " translateY="20.0">
                         <font>
-                            <Font size="14.0"/>
+                            <Font size="14.0" />
                         </font>
                     </Label>
-                    <TextField fx:id="txtfieldWithdrawStudentSearch" translateY="25.0"/>
-                    <ListView fx:id="listviewWithdrawStudentSearch" prefHeight="163.0" prefWidth="814.0"
-                              translateY="25.0"/>
+                    <TextField fx:id="txtfieldWithdrawStudentSearch" translateY="25.0" />
+                    <ListView fx:id="listviewWithdrawStudentSearch" prefHeight="163.0" prefWidth="814.0" translateY="25.0" />
                     <Label text="These students will be withdrawn from the course:" translateY="30.0">
                         <font>
-                            <Font size="14.0"/>
+                            <Font size="14.0" />
                         </font>
                     </Label>
-                    <ListView fx:id="listviewWithdrawStudentSelected" prefHeight="159.0" prefWidth="814.0"
-                              translateY="30.0"/>
-                    <Button fx:id="btnWithdrawStudentConfirm" mnemonicParsing="false" text="Confirm" translateX="360.0"
-                            translateY="60.0"/>
+                    <ListView fx:id="listviewWithdrawStudentSelected" prefHeight="159.0" prefWidth="814.0" translateY="30.0" />
+                    <Button fx:id="btnWithdrawStudentConfirm" mnemonicParsing="false" text="Confirm" translateX="360.0" translateY="60.0" />
                 </VBox>
             </StackPane>
 

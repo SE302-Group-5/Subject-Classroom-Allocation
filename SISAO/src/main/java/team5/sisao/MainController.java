@@ -5,6 +5,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -71,29 +73,31 @@ public class MainController {
 
 
     @FXML
-    public VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms, vboxViewStudents, vboxViewClassroomSchedule;
-    public Button btnViewClassrooms, btnViewStudents, btnViewCourses, btnStudentGoBack, btnClassroomGoBack;
+    public VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms, vboxViewStudents, vboxViewClassroomSchedule, vboxViewCourseAttendance;
+    public Button btnViewClassrooms, btnViewStudents, btnViewCourses, btnStudentGoBack, btnClassroomGoBack, btnAttendanceGoBack;
     public Button btnHelp;
-    public Label labelStudentSchedule, labelClassroomSchedule;
+    public Label labelStudentSchedule, labelClassroomSchedule, labelCourseAttendance;
     public TextArea textAreaCourses, textAreaClassrooms, textAreaStudents;
     public TableView<Course> tableViewCourses;
     public TableView<Classroom> tableViewClassrooms;
-    public TableView<String> tableViewStudents;
+    public TableView<String> tableViewStudents, tableViewCourseAttendance;
     public TableColumn<Course, String> columnCourseName, columnLecturer, columnDay, columnClassroom, columnAttendees;
     public TableColumn<Course, Integer> columnStartHour, columnDuration;
     public TableColumn<Classroom, String> columnClassroomName, columnClassroomSchedule;
     public TableColumn<Classroom, Integer> columnCapacity;
-    public TableColumn<String, String> columnStudentName, columnStudentSchedule;
+    public TableColumn<String, String> columnStudentName, columnStudentSchedule, columnScheduleStudentName;
 
     @FXML
     private ArrayList<VBox> vboxList = new ArrayList<>();
-    private ArrayList<Button> buttonList = new ArrayList<>();
+
     private ArrayList<Classroom> classroomsList = new ArrayList<>();
     private ArrayList<Course> coursesList = new ArrayList<>();
     private ArrayList<String> studentsList = new ArrayList<>();
+    private ArrayList<String> attendanceList = new ArrayList<>();
     private ObservableList<Course> observableCoursesList;
     private ObservableList<Classroom> observableClassroomsList;
     private ObservableList<String> observableStudentsList;
+    private ObservableList<String> observableAttendanceList;
 
     private DatabaseManager db;
     private static ClassroomManager classroomManager;
@@ -123,15 +127,7 @@ public class MainController {
         vboxList.add(vboxWithdrawStudent);
         vboxList.add(vboxViewStudentSchedule);
         vboxList.add(vboxViewClassroomSchedule);
-
-        buttonList.add(btnAddNewCourse);
-        buttonList.add(btnAddStudentToCourse);
-        buttonList.add(btnHelp);
-        buttonList.add(btnViewClassrooms);
-        buttonList.add(btnWithdrawStudent);
-        buttonList.add(btnViewCourses);
-        buttonList.add(btnViewStudents);
-        buttonList.add(btnStudentGoBack);
+        vboxList.add(vboxViewCourseAttendance);
 
         disableAllVboxes();
     }
@@ -169,7 +165,7 @@ public class MainController {
         //Make the TextArea and TableView visible
         textAreaClassrooms.setVisible(true);
         tableViewClassrooms.setVisible(true);
-        textAreaClassrooms.setText("Here is the list of available courses:");
+        textAreaClassrooms.setText("Here is the list of all classrooms: (Click to View)");
         //lists all available classrooms thats retrieved from the database in tableview
         setTableViewClassrooms();
 
@@ -201,6 +197,11 @@ public class MainController {
                 if (!cell.equals("N") || !cell.equals(null) || !cell.equals("")) {
                     Label label = new Label(cell);
                     gridPaneClassroomSchedule.add(label, day + 1, hour + 1);
+                    GridPane.setHalignment(label, HPos.CENTER);  // Horizontal center
+                    GridPane.setValignment(label, VPos.CENTER);  // Vertical center
+
+                    // Optionally set alignment for the entire GridPane to center its contents
+                    gridPaneClassroomSchedule.setAlignment(javafx.geometry.Pos.CENTER);
                 }
             }
         }
@@ -227,7 +228,7 @@ public class MainController {
         //Make the TextArea and TableView visible
         textAreaStudents.setVisible(true);
         tableViewStudents.setVisible(true);
-        textAreaStudents.setText("Here is the list of all students:");
+        textAreaStudents.setText("Here is the list of all students: (Click to View)");
         //lists all available students thats retrieved from the database in tableview
         setTableViewStudents();
 
@@ -268,6 +269,9 @@ public class MainController {
                 if (!cell.equals("N")) {
                     Label label = new Label(cell);
                     gridPaneStudentSchedule.add(label, day + 1, hour + 1);
+                    GridPane.setHalignment(label, HPos.CENTER);  // Horizontal center
+                    GridPane.setValignment(label, VPos.CENTER);  // Vertical center
+                    gridPaneStudentSchedule.setAlignment(javafx.geometry.Pos.CENTER);
                 }
             }
         }
@@ -325,10 +329,44 @@ public class MainController {
             //Make the TextArea and TableView visible
             textAreaCourses.setVisible(true);
             tableViewCourses.setVisible(true);
-            textAreaCourses.setText("Here is the list of available courses:");
+            textAreaCourses.setText("Here is the list of available courses: (Click to View)");
             //lists all available courses thats retrieved from the database in tableview
             setTableViewCourses();
+
+            final Boolean[] isSelected = {false};
+            ChangeListener<Course> listener = (observable, oldValue, newValue) -> {
+                if (newValue != null && !isSelected[0]) {
+                    Course selectedCourse = newValue;
+                    System.out.println("Selected: " + selectedCourse.getCourseName());
+                    showCourseAttendance(selectedCourse.getCourseName());
+                    isSelected[0] = true;
+
+                }
+            };
+            // Add the listener to the TableView
+            tableViewCourses.getSelectionModel().selectedItemProperty().addListener(listener);
         }
+
+        public void showCourseAttendance(String courseName) {
+            // Make the schedule visible
+            disableAllVboxes();
+            enableVbox(vboxViewCourseAttendance);
+            labelCourseAttendance.setText("Attendance for " + courseName + ":");
+
+            attendanceList = this.db.getEnrollment(courseName);
+            observableAttendanceList = observableArrayList(attendanceList);
+            tableViewCourseAttendance.setItems(observableAttendanceList);
+            labelCourseAttendance.setVisible(true);
+            tableViewCourseAttendance.setVisible(true);
+            setTableViewAttendance();
+            // if any other button is clicked on the navigation bar or go back button the gridpane should be cleared
+            btnAttendanceGoBack.setOnAction(event -> {
+                clearAllTables();
+                ViewCourses();
+            });
+        }
+
+
 
         public void ViewHelp () {
             clearAllTables();
@@ -360,6 +398,27 @@ public class MainController {
             // Set up the columns to display data
             columnStudentName.setCellValueFactory(cellData -> new SimpleStringProperty(formatStudentName(cellData.getValue())));
 
+        }
+
+        public void setTableViewAttendance () {
+            // Set up the columns to display data
+            columnScheduleStudentName.setCellValueFactory(cellData -> new SimpleStringProperty(formatStudentName(cellData.getValue())));
+            columnScheduleStudentName.setCellFactory(column -> {
+                TableCell<String, String> cell = new TableCell<String, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setText(null);
+                        } else {
+                            setText(item);
+                        }
+                        // Set text alignment to center
+                        setStyle("-fx-alignment: CENTER;");
+                    }
+                };
+                return cell;
+            });
         }
 
 
@@ -495,8 +554,11 @@ public class MainController {
             for (int day = 0; day < 7; day++) {
                 for (int hour = 0; hour < 16; hour++) {
                     if (!commonSchedule.getWeeklyProgram()[day][hour].equals("N")) {
-                        Label label = new Label("    Available");
+                        Label label = new Label("Available");
                         gridpaneAddNewCourseSchedule.add(label, day + 1, hour + 1);
+                        GridPane.setHalignment(label, HPos.CENTER);  // Horizontal center
+                        GridPane.setValignment(label, VPos.CENTER);  // Vertical center
+                        gridpaneAddNewCourseSchedule.setAlignment(javafx.geometry.Pos.CENTER);
                         //   System.out.println(day + " " + hour);
                     }
 
@@ -846,22 +908,6 @@ public class MainController {
                 listviewWithdrawStudentSearch.getItems().clear();
             }
             listviewWithdrawStudentSearch.setItems(withdrawStudentEnrollment);
-        }
-
-        // Other methods to be implemented
-        public void handleAdd () {
-            System.out.println("Add button clicked");
-
-        }
-
-        public void handleChange () {
-            System.out.println("Change button clicked");
-
-        }
-
-        public void handleDelete () {
-            System.out.println("Delete button clicked");
-
         }
 
 
