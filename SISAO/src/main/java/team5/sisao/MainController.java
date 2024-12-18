@@ -407,7 +407,7 @@ public class MainController {
                 choiceboxAddNewCourseDay.getItems().clear();
 
             }
-            clearGridPaneCells(gridpaneAddNewCourseSchedule);
+            clearGridPaneCells();
             disableAllVboxes();
             enableVbox(vboxAddNewCourseSchedule);
             courseDuration = 0;
@@ -480,13 +480,13 @@ public class MainController {
             });
         }
 
-        private void clearGridPaneCells (GridPane grid) {
-            if (grid.getChildren().size() > 0) {
+        private void clearGridPaneCells () {
+            if (gridpaneAddNewCourseSchedule.getChildren().size() > 0) {
                 // Iterate over all the rows (1 to 16) and columns (1 to 7)
                 for (int day = 1; day <= 7; day++) {  // Day (columns) from 1 to 7
                     for (int hour = 1; hour <= 16; hour++) {  // Hour (rows) from 1 to 16
                         // Iterate over all child nodes of the GridPane
-                        for (Node node : grid.getChildren()) {
+                        for (Node node : gridpaneAddNewCourseSchedule.getChildren()) {
                             // Get the row and column indices of each node
                             Integer rowIndex = GridPane.getRowIndex(node);
                             Integer columnIndex = GridPane.getColumnIndex(node);
@@ -497,7 +497,7 @@ public class MainController {
 
                             // If the current node is at the specified row and column, remove it
                             if (rowIndex == hour && columnIndex == day) {
-                                grid.getChildren().remove(node);
+                                gridpaneAddNewCourseSchedule.getChildren().remove(node);
                                 break;  // Stop searching after removing the node
                             }
                         }
