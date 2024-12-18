@@ -12,14 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
-import javafx.util.Callback;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static javafx.collections.FXCollections.observableArrayList;
@@ -79,7 +75,7 @@ public class MainController {
     private VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms, vboxViewStudents;
     //Buttons
     @FXML
-    private Button btnViewClassrooms, btnViewStudents, btnViewCourses;
+    private Button btnViewClassrooms, btnViewStudents, btnViewCourses, btnGoBack;
     @FXML
     private Button btnHelp;
     @FXML
@@ -105,6 +101,7 @@ public class MainController {
 
 
     private ArrayList<VBox> vboxList = new ArrayList<>();
+    private ArrayList<Button> buttonList = new ArrayList<>();
     private ArrayList<Classroom> classroomsList = new ArrayList<>();
     private ArrayList<Course> coursesList = new ArrayList<>();
     private ArrayList<String> studentsList = new ArrayList<>();
@@ -139,6 +136,16 @@ public class MainController {
         vboxList.add(vboxAddStudent);
         vboxList.add(vboxWithdrawStudent);
         vboxList.add(vboxViewStudentSchedule);
+
+        buttonList.add(btnAddNewCourse);
+        buttonList.add(btnAddStudentToCourse);
+        buttonList.add(btnHelp);
+        buttonList.add(btnViewClassrooms);
+        buttonList.add(btnWithdrawStudent);
+        buttonList.add(btnViewCourses);
+        buttonList.add(btnViewStudents);
+        buttonList.add(btnGoBack);
+
         disableAllVboxes();
     }
 
@@ -160,6 +167,7 @@ public class MainController {
 
     //View methods
     public void ViewClassrooms() {
+        clearAllTables();
         disableAllVboxes();
         enableVbox(vboxViewClassrooms);
         // Above part this necessary for all the vboxes that will be visible or invisible
@@ -181,6 +189,7 @@ public class MainController {
     }
 
     public void ViewStudents() {
+        clearAllTables();
         disableAllVboxes();
         enableVbox(vboxViewStudents);
         // Above part this necessary for all the vboxes that will be visible or invisible
@@ -190,25 +199,26 @@ public class MainController {
         observableStudentsList = observableArrayList(studentsList);
         // Bind the ObservableList to the TableView
         tableViewStudents.setItems(observableStudentsList);
-
+        // Reset the selection model to clear any previous selections
+        tableViewStudents.getSelectionModel().clearSelection();
         //Make the TextArea and TableView visible
         textAreaStudents.setVisible(true);
         tableViewStudents.setVisible(true);
         textAreaStudents.setText("Here is the list of all students:");
         //lists all available students thats retrieved from the database in tableview
         setTableViewStudents();
-        final AtomicBoolean isSelected = new AtomicBoolean(false);
-        // Define the listener and keep a reference to it
+
+        final Boolean[] isSelected = {false};
+
         ChangeListener<String> selectionListener = new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue != null && !isSelected.get()) {
+                if (newValue != null && !isSelected[0]) {
                     String selectedStudentName = newValue;
                     System.out.println("Selected: " + selectedStudentName);
                     showStudentSchedule(selectedStudentName);
 
-                    // Set the flag to true to stop future selections
-                    isSelected.set(true);
+                    isSelected[0] = true;
 
                     // Remove the listener after the first selection
                     tableViewStudents.getSelectionModel().selectedItemProperty().removeListener(this);
@@ -222,7 +232,6 @@ public class MainController {
     }
 
     public void showStudentSchedule(String studentName) {
-
         // Make the schedule visible
         disableAllVboxes();
         enableVbox(vboxViewStudentSchedule);
@@ -239,11 +248,46 @@ public class MainController {
                 }
             }
         }
+        // if any other button is clicked on the navigation bar or go back button the gridpane should be cleared
 
-        btnViewStudents.setOnAction(event -> ViewStudents());
+        btnGoBack.setOnAction(event -> {
+            clearAllTables();
+            ViewStudents();
+        });
+    }
+
+    public void clearAllTables() {
+        clearGridPaneCells(gridPaneStudentSchedule);
+    }
+
+    private void clearGridPaneCells (GridPane gridPane) {
+        if (gridPane.getChildren().size() > 0) {
+            // Iterate over all the rows (1 to 16) and columns (1 to 7)
+            for (int day = 1; day <= 7; day++) {  // Day (columns) from 1 to 7
+                for (int hour = 1; hour <= 16; hour++) {  // Hour (rows) from 1 to 16
+                    // Iterate over all child nodes of the GridPane
+                    for (Node node : gridPane.getChildren()) {
+                        // Get the row and column indices of each node
+                        Integer rowIndex = GridPane.getRowIndex(node);
+                        Integer columnIndex = GridPane.getColumnIndex(node);
+
+                        // Default to 0 if row or column indices are not set
+                        rowIndex = (rowIndex == null) ? 0 : rowIndex;
+                        columnIndex = (columnIndex == null) ? 0 : columnIndex;
+
+                        // If the current node is at the specified row and column, remove it
+                        if (rowIndex == hour && columnIndex == day) {
+                            gridPane.getChildren().remove(node);
+                            break;  // Stop searching after removing the node
+                        }
+                    }
+                }
+            }
+        }
     }
 
         public void ViewCourses () {
+            clearAllTables();
             disableAllVboxes();
             enableVbox(vboxViewCourses);
             // Above part this necessary for all the vboxes that will be visible or invisible
@@ -263,6 +307,7 @@ public class MainController {
         }
 
         public void ViewHelp () {
+            clearAllTables();
             System.out.println("Help button clicked");
         }
 
@@ -300,6 +345,7 @@ public class MainController {
         }
 
         public void addNewCourseSetNameAndLecturer () {
+            clearAllTables();
             disableAllVboxes();
             enableVbox(vboxAddNewCourse);
             // Above part this necessary for all the vboxes that will be visible or invisible
@@ -407,7 +453,7 @@ public class MainController {
                 choiceboxAddNewCourseDay.getItems().clear();
 
             }
-            clearGridPaneCells();
+            clearGridPaneCells(gridpaneAddNewCourseSchedule);
             disableAllVboxes();
             enableVbox(vboxAddNewCourseSchedule);
             courseDuration = 0;
@@ -480,31 +526,6 @@ public class MainController {
             });
         }
 
-        private void clearGridPaneCells () {
-            if (gridpaneAddNewCourseSchedule.getChildren().size() > 0) {
-                // Iterate over all the rows (1 to 16) and columns (1 to 7)
-                for (int day = 1; day <= 7; day++) {  // Day (columns) from 1 to 7
-                    for (int hour = 1; hour <= 16; hour++) {  // Hour (rows) from 1 to 16
-                        // Iterate over all child nodes of the GridPane
-                        for (Node node : gridpaneAddNewCourseSchedule.getChildren()) {
-                            // Get the row and column indices of each node
-                            Integer rowIndex = GridPane.getRowIndex(node);
-                            Integer columnIndex = GridPane.getColumnIndex(node);
-
-                            // Default to 0 if row or column indices are not set
-                            rowIndex = (rowIndex == null) ? 0 : rowIndex;
-                            columnIndex = (columnIndex == null) ? 0 : columnIndex;
-
-                            // If the current node is at the specified row and column, remove it
-                            if (rowIndex == hour && columnIndex == day) {
-                                gridpaneAddNewCourseSchedule.getChildren().remove(node);
-                                break;  // Stop searching after removing the node
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         public void addNewCourseFinal () {
 
@@ -544,6 +565,7 @@ public class MainController {
         }
 
         public void addStudent () {
+            clearAllTables();
             disableAllVboxes();
             enableVbox(vboxAddStudent);
 
@@ -683,6 +705,7 @@ public class MainController {
         }
 
         public void withdrawStudent () {
+            clearAllTables();
             disableAllVboxes();
             enableVbox(vboxWithdrawStudent);
 

@@ -147,6 +147,11 @@
                 </VBox>
 
                 <VBox fx:id="vboxViewStudentSchedule" prefHeight="421.0" prefWidth="587.0" visible="false">
+               <Button fx:id = "btnGoBack" mnemonicParsing="false" prefWidth="100.0" text="&lt;- Go Back" translateX="30.0" translateY="30.0">
+                  <font>
+                     <Font size="15.0" />
+                  </font>
+               </Button>
                     <Label fx:id="labelStudentSchedule" prefHeight="29.0" prefWidth="377.0" text=" " translateX="40.0" translateY="20.0">
                     <font>
                             <Font size="15.0" />
