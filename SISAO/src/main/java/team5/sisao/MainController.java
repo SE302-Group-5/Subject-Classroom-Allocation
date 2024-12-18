@@ -16,7 +16,6 @@ import javafx.scene.control.TableColumn;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -38,7 +37,7 @@ public class MainController {
     public ListView<String> listviewAddNewCourseSelectedStudents;
     public ListView<String> listviewAddNewCourseSearchStudent;
     public Button btnAddNewCourse, btnAddStudentToCourse, btnAddNewCourseConfirm, btnAddNewCourseStudentConfirm, btnAddNewCourseScheduleConfirm;
-    public GridPane gridpaneAddNewCourseSchedule, gridPaneStudentSchedule;
+    public GridPane gridpaneAddNewCourseSchedule, gridPaneStudentSchedule, gridPaneClassroomSchedule;
     public ChoiceBox<String> choiceboxAddNewCourseDay, choiceboxAddNewCourseHour;
     public ChoiceBox<Integer> choiceboxAddNewCourseDuration;
     private String courseName, courseLecturer, courseDay, courseHour;
@@ -72,34 +71,21 @@ public class MainController {
 
 
     @FXML
-    private VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms, vboxViewStudents;
-    //Buttons
-    @FXML
-    private Button btnViewClassrooms, btnViewStudents, btnViewCourses, btnGoBack;
-    @FXML
-    private Button btnHelp;
-    @FXML
-    private Label labelStudentSchedule;
-    @FXML
-    private TextArea textAreaCourses, textAreaClassrooms, textAreaStudents;
-    @FXML
-    private TableView<Course> tableViewCourses;
-    @FXML
-    private TableView<Classroom> tableViewClassrooms;
-    @FXML
-    private TableView<String> tableViewStudents;
-    @FXML
-    private TableColumn<Course, String> columnCourseName, columnLecturer, columnDay, columnClassroom, columnAttendees;
-    @FXML
-    private TableColumn<Course, Integer> columnStartHour, columnDuration;
-    @FXML
-    private TableColumn<Classroom, String> columnClassroomName, columnClassroomSchedule;
-    @FXML
-    private TableColumn<Classroom, Integer> columnCapacity;
-    @FXML
-    private TableColumn<String, String> columnStudentName, columnStudentSchedule;
+    public VBox vboxMain, vboxLeftMain, vboxViewCourses, vboxViewClassrooms, vboxViewStudents, vboxViewClassroomSchedule;
+    public Button btnViewClassrooms, btnViewStudents, btnViewCourses, btnStudentGoBack, btnClassroomGoBack;
+    public Button btnHelp;
+    public Label labelStudentSchedule, labelClassroomSchedule;
+    public TextArea textAreaCourses, textAreaClassrooms, textAreaStudents;
+    public TableView<Course> tableViewCourses;
+    public TableView<Classroom> tableViewClassrooms;
+    public TableView<String> tableViewStudents;
+    public TableColumn<Course, String> columnCourseName, columnLecturer, columnDay, columnClassroom, columnAttendees;
+    public TableColumn<Course, Integer> columnStartHour, columnDuration;
+    public TableColumn<Classroom, String> columnClassroomName, columnClassroomSchedule;
+    public TableColumn<Classroom, Integer> columnCapacity;
+    public TableColumn<String, String> columnStudentName, columnStudentSchedule;
 
-
+    @FXML
     private ArrayList<VBox> vboxList = new ArrayList<>();
     private ArrayList<Button> buttonList = new ArrayList<>();
     private ArrayList<Classroom> classroomsList = new ArrayList<>();
@@ -136,6 +122,7 @@ public class MainController {
         vboxList.add(vboxAddStudent);
         vboxList.add(vboxWithdrawStudent);
         vboxList.add(vboxViewStudentSchedule);
+        vboxList.add(vboxViewClassroomSchedule);
 
         buttonList.add(btnAddNewCourse);
         buttonList.add(btnAddStudentToCourse);
@@ -144,7 +131,7 @@ public class MainController {
         buttonList.add(btnWithdrawStudent);
         buttonList.add(btnViewCourses);
         buttonList.add(btnViewStudents);
-        buttonList.add(btnGoBack);
+        buttonList.add(btnStudentGoBack);
 
         disableAllVboxes();
     }
@@ -176,9 +163,9 @@ public class MainController {
 
         classroomsList = this.db.getClassrooms();
         observableClassroomsList = observableArrayList(classroomsList);
-        // Bind the ObservableList to the TableView
-        tableViewClassrooms.setItems(observableClassroomsList);
-
+        if (observableClassroomsList != null && !observableClassroomsList.isEmpty()) {
+            tableViewClassrooms.setItems(observableClassroomsList);
+        }
         //Make the TextArea and TableView visible
         textAreaClassrooms.setVisible(true);
         tableViewClassrooms.setVisible(true);
@@ -186,6 +173,42 @@ public class MainController {
         //lists all available classrooms thats retrieved from the database in tableview
         setTableViewClassrooms();
 
+        final Boolean[] isSelected = {false};
+        ChangeListener<Classroom> listener = (observable, oldValue, newValue) -> {
+            if (newValue != null && !isSelected[0]) {
+                Classroom selectedClassroom = newValue;
+                System.out.println("Selected: " + selectedClassroom.getClassroomName());
+                showClassroomSchedule(selectedClassroom.getClassroomName());
+
+                isSelected[0] = true;
+
+            }
+        };
+        // Add the listener to the TableView
+        tableViewClassrooms.getSelectionModel().selectedItemProperty().addListener(listener);
+    }
+
+    public void showClassroomSchedule(String classroomName) {
+        // Make the schedule visible
+        disableAllVboxes();
+        enableVbox(vboxViewClassroomSchedule);
+        labelClassroomSchedule.setText("Schedule for " + classroomName + ":");
+
+        Schedule schedule = this.db.getSchedule(classroomName);
+        for (int day = 0; day < 7; day++) {
+            for (int hour = 0; hour < 16; hour++) {
+                String cell = schedule.getWeeklyProgram()[day][hour];
+                if (!cell.equals("N") || !cell.equals(null) || !cell.equals("")) {
+                    Label label = new Label(cell);
+                    gridPaneClassroomSchedule.add(label, day + 1, hour + 1);
+                }
+            }
+        }
+        // if any other button is clicked on the navigation bar or go back button the gridpane should be cleared
+        btnClassroomGoBack.setOnAction(event -> {
+            clearAllTables();
+            ViewClassrooms();
+        });
     }
 
     public void ViewStudents() {
@@ -250,7 +273,7 @@ public class MainController {
         }
         // if any other button is clicked on the navigation bar or go back button the gridpane should be cleared
 
-        btnGoBack.setOnAction(event -> {
+        btnStudentGoBack.setOnAction(event -> {
             clearAllTables();
             ViewStudents();
         });
@@ -258,6 +281,7 @@ public class MainController {
 
     public void clearAllTables() {
         clearGridPaneCells(gridPaneStudentSchedule);
+        clearGridPaneCells(gridPaneClassroomSchedule);
     }
 
     private void clearGridPaneCells (GridPane gridPane) {
