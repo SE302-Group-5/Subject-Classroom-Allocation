@@ -801,7 +801,7 @@ public class MainController {
                         filteredItems.addAll(withdrawStudentEnrollment);
                     }
                     listviewWithdrawStudentSearch.setItems(filteredItems);
-                    listviewWithdrawStudentSelected.setItems(WithdrawStudentselectedStudents);
+
                 }
 
             });
@@ -813,7 +813,7 @@ public class MainController {
                     if (!WithdrawStudentselectedStudents.contains(selectedItem)) {
                         WithdrawStudentselectedStudents.add(selectedItem);
                     }
-
+                    listviewWithdrawStudentSelected.setItems(WithdrawStudentselectedStudents);
                 }
             });
 
