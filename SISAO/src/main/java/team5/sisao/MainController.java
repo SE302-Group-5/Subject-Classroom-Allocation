@@ -910,6 +910,65 @@ public class MainController {
             listviewWithdrawStudentSearch.setItems(withdrawStudentEnrollment);
         }
 
+    @FXML
+    private TextField txtCourseName, txtClassroomName;
+
+    @FXML
+    private void handleChangeClassroom() {
+        String courseName = txtCourseName.getText();
+        String classroomName = txtClassroomName.getText();
+
+        if (courseName.isEmpty() || classroomName.isEmpty()) {
+            showAlert("Error", "Please provide both course and classroom names!");
+            return;
+        }
+
+        changeClassroom(courseName, classroomName);
+    }
+
+    public void changeClassroom(String courseName, String classroomName) {
+        Course course = db.getCourse(courseName);
+        Classroom classroom = db.getClassroom(classroomName);
+
+        if (course == null || classroom == null) {
+            showAlert("Error", "Classroom or course not found.");
+            return;
+        }
+
+        int enrollment = db.getEnrollmentCount(courseName);
+        if (classroom.getCapacity() >= enrollment) {
+            int day = course.getDay();
+            int startHour = course.getStartHour();
+            int duration = course.getDuration();
+
+            if (db.isAvailable(classroomName, day, startHour, duration)) {
+                if (course.getClassroom() != null) {
+                    db.updateSchedule(course.getClassroom(), "", day, startHour, duration);
+                }
+
+                db.updateSchedule(classroomName, courseName, day, startHour, duration);
+                course.setClassroom(classroomName);
+
+                try {
+                    db.updateCourseClassroom(courseName, classroomName);
+                    showAlert("Success", "Classroom successfully updated!");
+                } catch (Exception e) {
+                    showAlert("Error", "Failed to update the classroom: " + e.getMessage());
+                }
+            } else {
+                showAlert("Error", "Classroom is not available at the specified time.");
+            }
+        } else {
+            showAlert("Error", "Classroom does not have enough capacity.");
+        }
+    }
 
 
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

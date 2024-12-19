@@ -61,6 +61,11 @@
                         </TitledPane>
                         <TitledPane animated="false" text="Change">
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <VBox spacing="10" alignment="CENTER">
+                                <TextField fx:id="txtCourseName" promptText="Enter Course Name" />
+                                <TextField fx:id="txtClassroomName" promptText="Enter Classroom Name" />
+                                <Button text="Change Classroom" onAction="#handleChangeClassroom" />
+                            </VBox>
                      <font>
                         <Font size="15.0" />
                      </font>

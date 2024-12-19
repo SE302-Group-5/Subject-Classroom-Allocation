@@ -880,4 +880,25 @@ public class DatabaseManager {
         updateSchedule(student, "", course.getDay(), course.getStartHour(), course.getDuration());
 
     }
+
+    public void updateCourseClassroom(String courseName, String classroomName) {
+        try {
+            String deleteQuery = "UPDATE courses SET classroom = NULL WHERE courseName = ?";
+            PreparedStatement deleteStatement = databaseConnection.prepareStatement(deleteQuery);
+            deleteStatement.setString(1, courseName);
+            deleteStatement.executeUpdate();
+
+            String updateQuery = "UPDATE courses SET classroom = ? WHERE courseName = ?";
+            PreparedStatement updateStatement = databaseConnection.prepareStatement(updateQuery);
+            updateStatement.setString(1, classroomName);
+            updateStatement.setString(2, courseName);
+            updateStatement.executeUpdate();
+
+            System.out.println("Course " + courseName + " successfully updated to classroom " + classroomName);
+
+        } catch (SQLException e) {
+            System.err.println("Error updating course " + courseName + " with new classroom " + classroomName);
+            e.printStackTrace();
+        }
+    }
 }
