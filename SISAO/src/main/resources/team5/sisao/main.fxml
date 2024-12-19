@@ -37,7 +37,7 @@
         <!-- Main HBox to hold both button sections -->
         <HBox prefHeight="421.0" prefWidth="800.0">
 
-            <!-- VBox for Action Buttons (Left Section) -->
+               <!-- VBox for Action Buttons (Left Section) -->
             <VBox fx:id="vboxLeftMain" maxHeight="600.0" minHeight="600.0" prefHeight="600.0" prefWidth="185.0" spacing="10" style="-fx-background-color: #f0f0f0; -fx-padding: 10;">
                 <Accordion translateY="30.0">
                     <panes>
@@ -59,17 +59,6 @@
                         <Font size="15.0" />
                      </font>
                         </TitledPane>
-                        <TitledPane animated="false" text="Change">
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                            <VBox alignment="CENTER" spacing="10">
-                                <TextField fx:id="txtCourseName" promptText="Enter Course Name" />
-                                <TextField fx:id="txtClassroomName" promptText="Enter Classroom Name" />
-                                <Button onAction="#handleChangeClassroom" text="Change Classroom" />
-                            </VBox>
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                        </TitledPane>
                         <TitledPane animated="false" text="Add">
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="163.0">
                                 <Button fx:id="btnAddNewCourse" layoutX="7.0" layoutY="14.0" onAction="#addNewCourseSetNameAndLecturer" prefHeight="25.0" prefWidth="150.0" text="Add New Course" />
@@ -79,13 +68,24 @@
                         <Font size="15.0" />
                      </font>
                         </TitledPane>
+                        <TitledPane animated="false" prefHeight="163.0" prefWidth="165.0" text="Change">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <VBox alignment="CENTER" spacing="10">
+                        <children>
+                           <Button onAction="#handleChangeClassroom" prefHeight="25.0" prefWidth="150.0" text="Change CLassroom" translateY="-40.0" />
+                        </children></VBox>
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                        </TitledPane>
                     </panes>
                 </Accordion>
 
-                <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help" translateY="100.0">
+                   <Button fx:id="btnHelp" onAction="#ViewHelp" prefHeight="25.0" prefWidth="200.0" text="Help" translateY="100.0">
                <font>
                   <Font size="15.0" />
-               </font></Button>
+               </font>
+            </Button>
             </VBox>
             <StackPane prefHeight="477.0" prefWidth="814.0">
                 <VBox fx:id="vboxViewCourses" prefHeight="421.0" prefWidth="587.0" visible="false">
@@ -330,7 +330,7 @@
                     </GridPane>
                 </VBox>
 
-                <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" translateX="10.0">
+                <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" visible="false">
                     <Label prefWidth="220.0" text="Course Name" translateX="40.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="20.0" />
@@ -580,6 +580,50 @@
                     <ListView fx:id="listviewWithdrawStudentSelected" prefHeight="159.0" prefWidth="814.0" translateY="30.0" />
                     <Button fx:id="btnWithdrawStudentConfirm" mnemonicParsing="false" text="Confirm" translateX="360.0" translateY="60.0" />
                 </VBox>
+            <VBox fx:id="vboxChangeClassroom" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label text="Enter Course" translateX="40.0" translateY="20.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </Label>
+                          <TextField fx:id="txtCourseName" maxWidth="500.0" prefWidth="500.0" promptText="Enter Course Name" translateX="40.0" translateY="25.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></TextField>
+                  <Label text="Enter Classroom" translateX="40.0" translateY="20.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </Label>
+                          <TextField fx:id="txtClassroomName" maxWidth="500.0" prefWidth="500.0" promptText="Enter Classroom Name" translateX="40.0" translateY="25.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin></TextField>
+                          <Button fx:id="btnChangeClassroomConfirm" onAction="#handleChangeClassroom" prefHeight="29.0" prefWidth="90.0" text="Confirm" translateX="250.0" translateY="65.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font></Button>
+               </children>
+            </VBox>
             </StackPane>
 
 

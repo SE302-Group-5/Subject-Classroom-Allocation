@@ -103,6 +103,11 @@ public class MainController {
     private static ClassroomManager classroomManager;
     private static CourseManager courseManager;
 
+    @FXML
+    private VBox vboxChangeClassroom;
+    @FXML
+    private Button btnChangeClassroom, btnChangeClassroomConfirm;
+
     //initializes logo
     public void initialize() {
         logo.setImage(new Image(getClass().getResource("/team5/sisao/logo.png").toExternalForm()));
@@ -128,6 +133,7 @@ public class MainController {
         vboxList.add(vboxViewStudentSchedule);
         vboxList.add(vboxViewClassroomSchedule);
         vboxList.add(vboxViewCourseAttendance);
+        vboxList.add(vboxChangeClassroom);
 
 
         disableAllVboxes();
@@ -619,8 +625,8 @@ public class MainController {
 
                 if (db.isCourseNameUnique(courseName)) {
                     addNewCourseFinal();
-                }else{
-                    showAlert("Error","Course already added");
+                } else {
+                    showAlert("Error", "Course already added");
                 }
 
             }
@@ -754,8 +760,7 @@ public class MainController {
                 String selectedItem = listviewAddNewStudentSearch.getSelectionModel().getSelectedItem();
 
                 int addedEnrollment = AddStudentselectedStudents.size() + addStudentEnrollment.size();
-                if (selectedItem != null && !AddStudentselectedStudents.contains(selectedItem) && addedEnrollment <
-                        addStudentClassroomCapacity) {
+                if (selectedItem != null && !AddStudentselectedStudents.contains(selectedItem) && addedEnrollment < addStudentClassroomCapacity) {
 
                     AddStudentselectedStudents.add(selectedItem);
                 } else {
@@ -852,8 +857,7 @@ public class MainController {
         txtfieldWithdrawStudentSearch.clear();
 
 
-        txtfieldWithdrawStudentSearch.textProperty().addListener((observable, oldValue, newValue) ->
-        {
+        txtfieldWithdrawStudentSearch.textProperty().addListener((observable, oldValue, newValue) -> {
             //       System.out.println("Search text changed: " + newValue);  // Debug line
             if (!choiceboxWithdrawStudentCourse.getValue().isBlank()) {
                 ObservableList<String> filteredItems = observableArrayList();
@@ -874,8 +878,7 @@ public class MainController {
 
         });
 
-        listviewWithdrawStudentSearch.setOnMouseClicked(event ->
-        {
+        listviewWithdrawStudentSearch.setOnMouseClicked(event -> {
             if (listviewWithdrawStudentSearch.getItems().size() > 0) {
                 String selectedItem = listviewWithdrawStudentSearch.getSelectionModel().getSelectedItem();
                 if (!WithdrawStudentselectedStudents.contains(selectedItem)) {
@@ -885,8 +888,7 @@ public class MainController {
             }
         });
 
-        listviewWithdrawStudentSelected.setOnMouseClicked(event ->
-        {
+        listviewWithdrawStudentSelected.setOnMouseClicked(event -> {
             String selectedItem = listviewWithdrawStudentSelected.getSelectionModel().getSelectedItem();
             if (selectedItem != null) {
                 WithdrawStudentselectedStudents.remove(selectedItem);
@@ -903,6 +905,7 @@ public class MainController {
                 }
 
                 withdrawStudent();
+                showAlert("Success", "Wİthdrawn Students.");
             }
         });
 
@@ -921,15 +924,28 @@ public class MainController {
 
     @FXML
     private void handleChangeClassroom() {
-        String courseName = txtCourseName.getText();
-        String classroomName = txtClassroomName.getText();
 
-        if (courseName.isEmpty() || classroomName.isEmpty()) {
-            showAlert("Error", "Please provide both course and classroom names!");
-            return;
-        }
+        clearAllTables();
+        disableAllVboxes();
+        enableVbox(vboxChangeClassroom);
 
-        changeClassroom(courseName, classroomName);
+
+            txtClassroomName.clear();
+            txtCourseName.clear();
+
+        btnChangeClassroomConfirm.setOnAction(event -> {
+            if (!txtCourseName.getText().isBlank() && !txtClassroomName.getText().isBlank()) {
+                String courseName = txtCourseName.getText();
+                String classroomName = txtClassroomName.getText();
+                changeClassroom(courseName, classroomName);
+            } else {
+                showAlert("Error", "Please provide both course and classroom names!");
+                return;
+
+            }
+        });
+
+
     }
 
     public void changeClassroom(String courseName, String classroomName) {
