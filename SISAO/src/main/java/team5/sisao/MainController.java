@@ -616,7 +616,13 @@ public class MainController {
         });
         btnAddNewCourseScheduleConfirm.setOnAction(event -> {
             if (courseDuration != 0) {
-                addNewCourseFinal();
+
+                if (db.isCourseNameUnique(courseName)) {
+                    addNewCourseFinal();
+                }else{
+                    showAlert("Error","Course already added");
+                }
+
             }
         });
     }
@@ -637,8 +643,10 @@ public class MainController {
 
             Course newCourse = courseManager.addCourse(courseName, courseDay, courseHour, courseDuration, courseLecturer, classroom, courseEnrollment);
             courseName = newCourse.getCourseName();
-
+            //    System.err.println("uuuuuuuu");
             db.updateSchedule(classroom, courseName, day, hour, courseDuration);
+
+
             //      System.out.println("Added new course NAME: " + courseName + " classroom: " + classroom + " day: " + courseDay + " coursehour: " + courseHour);
         } else {
             showAlert("Error", "There are no available classroom with enough capacity" + courseName);
