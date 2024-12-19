@@ -61,10 +61,10 @@
                         </TitledPane>
                         <TitledPane animated="false" text="Change">
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                            <VBox spacing="10" alignment="CENTER">
+                            <VBox alignment="CENTER" spacing="10">
                                 <TextField fx:id="txtCourseName" promptText="Enter Course Name" />
                                 <TextField fx:id="txtClassroomName" promptText="Enter Classroom Name" />
-                                <Button text="Change Classroom" onAction="#handleChangeClassroom" />
+                                <Button onAction="#handleChangeClassroom" text="Change Classroom" />
                             </VBox>
                      <font>
                         <Font size="15.0" />
@@ -330,7 +330,7 @@
                     </GridPane>
                 </VBox>
 
-                <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" translateX="10.0" visible="false">
+                <VBox fx:id="vboxAddNewCourse" prefHeight="200.0" prefWidth="100.0" translateX="10.0">
                     <Label prefWidth="220.0" text="Course Name" translateX="40.0" translateY="20.0">
                   <VBox.margin>
                      <Insets top="20.0" />
@@ -341,7 +341,7 @@
                   <font>
                      <Font size="15.0" />
                   </font></Label>
-                    <TextField fx:id="txtfieldAddNewCourseName" maxWidth="500.0" prefWidth="500.0" promptText="Enter Course Name Here..." translateX="40.0" translateY="20.0">
+                    <TextField fx:id="txtfieldAddNewCourseName" maxWidth="500.0" prefWidth="500.0" promptText="Enter Course Name Here..." translateX="40.0" translateY="25.0">
                   <VBox.margin>
                      <Insets top="5.0" />
                   </VBox.margin>
@@ -358,7 +358,7 @@
                   <font>
                      <Font size="15.0" />
                   </font></Label>
-                    <TextField fx:id="txtfieldAddNewCourseLecturer" maxWidth="500.0" prefWidth="500.0" promptText="Enter Lecturer Here..." translateX="40.0" translateY="20.0">
+                    <TextField fx:id="txtfieldAddNewCourseLecturer" maxWidth="500.0" prefWidth="500.0" promptText="Enter Lecturer Here..." translateX="40.0" translateY="25.0">
                   <VBox.margin>
                      <Insets top="5.0" />
                   </VBox.margin>
@@ -366,7 +366,7 @@
                      <Font size="15.0" />
                   </font></TextField>
                     <HBox prefHeight="31.0" prefWidth="814.0">
-                        <Button fx:id="btnAddNewCourseConfirm" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addNewCourseSetStudents" prefHeight="29.0" prefWidth="90.0" text="Confirm" translateX="300.0" translateY="100.0">
+                        <Button fx:id="btnAddNewCourseConfirm" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="29.0" prefWidth="90.0" text="Confirm" translateX="300.0" translateY="100.0">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
@@ -376,7 +376,7 @@
                     </HBox>
                 </VBox>
                 <VBox fx:id="vboxAddNewCourseStudents" prefHeight="200.0" prefWidth="100.0" visible="false">
-                    <Label layoutX="-20.0" prefHeight="30.0" prefWidth="306.0" text="Search Students To Enroll to Course:" translateX="150.0" translateY="20.0">
+                    <Label layoutX="-20.0" prefHeight="30.0" prefWidth="306.0" text="Search Students to Enroll to Course:" translateX="150.0" translateY="20.0">
                   <padding>
                      <Insets top="5.0" />
                   </padding>

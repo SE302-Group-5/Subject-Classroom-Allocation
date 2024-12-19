@@ -129,6 +129,7 @@ public class MainController {
         vboxList.add(vboxViewClassroomSchedule);
         vboxList.add(vboxViewCourseAttendance);
 
+
         disableAllVboxes();
     }
 
@@ -440,25 +441,21 @@ public class MainController {
             // Clearing operations above are useful when user presses Add New Course again
             // This makes it seem like the screen was reloaded
 
-            btnAddNewCourseConfirm.setDisable(true);
+
 
             System.out.println("Add New Course button clicked");
 
-            txtfieldAddNewCourseName.textProperty().addListener((observable, oldValue, newValue) -> toggleAddNewCourseConfirmButton());
-            txtfieldAddNewCourseLecturer.textProperty().addListener((observable, oldValue, newValue) -> toggleAddNewCourseConfirmButton());
-            // Goal here was to make the button disabled when fields are empty
-            // Could have just made it so that the button is enabled but does nothing
-        }
+            btnAddNewCourseConfirm.setOnAction(event ->{
+                if (!txtfieldAddNewCourseName.getText().isBlank() && !txtfieldAddNewCourseLecturer.getText().isBlank()) {
 
-        public void toggleAddNewCourseConfirmButton () {
-            if (!txtfieldAddNewCourseName.getText().isBlank() && !txtfieldAddNewCourseLecturer.getText().isBlank()) {
+                   addNewCourseSetStudents();
 
-                btnAddNewCourseConfirm.setDisable(false);
 
-                // Enable the button
-            } else {
-                btnAddNewCourseConfirm.setDisable(true);
-            }
+                }
+                else{
+                    showAlert("Error","Please Enter the Course's and the Lecturer's Name.");
+                }
+            });
         }
 
         public void addNewCourseSetStudents () {
