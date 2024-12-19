@@ -638,10 +638,12 @@ public class MainController {
                     db.updateSchedule(classroom, courseName, day, hour, courseDuration);
                     //      System.out.println("Added new course NAME: " + courseName + " classroom: " + classroom + " day: " + courseDay + " coursehour: " + courseHour);
                 } else {
-                    System.err.println("There are no available classroom with enough capacity");
+                    showAlert("Error","There are no available classroom with enough capacity" + courseName);
+                  //  System.err.println("There are no available classroom with enough capacity");
                 }
             } else {
-                System.err.println("a course with that name already exists: " + courseName);
+               showAlert("Error","Course with that name already exists: " + courseName);
+              //  System.err.println("a course with that name already exists: " + courseName);
             }
 
 
