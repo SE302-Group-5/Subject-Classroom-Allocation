@@ -522,9 +522,9 @@
                     </HBox>
                     <Button fx:id="btnAddNewCourseScheduleConfirm" mnemonicParsing="false" text="Confirm" translateX="350.0" translateY="-30.0" />
                 </VBox>
-                <VBox fx:id="vboxAddStudent" disable="true" prefHeight="200.0" prefWidth="100.0" visible="false">
+                <VBox fx:id="vboxAddStudent" disable="true" prefHeight="200.0" prefWidth="100.0">
                     <HBox prefHeight="33.0" prefWidth="814.0" translateY="10.0">
-                        <Label prefHeight="36.0" prefWidth="128.0" text="Choose the Course: " translateX="30.0" translateY="30.0">
+                        <Label prefHeight="25.0" prefWidth="160.0" text="Choose the Course: " translateX="30.0" translateY="30.0">
                             <font>
                                 <Font size="15.0" />
                             </font>
@@ -579,7 +579,7 @@
                     <ListView fx:id="listviewWithdrawStudentSelected" prefHeight="159.0" prefWidth="814.0" translateY="30.0" />
                     <Button fx:id="btnWithdrawStudentConfirm" mnemonicParsing="false" text="Confirm" translateX="360.0" translateY="60.0" />
                 </VBox>
-                <VBox fx:id="vboxChangeClassroom" prefHeight="200.0" prefWidth="100.0">
+                <VBox fx:id="vboxChangeClassroom" prefHeight="200.0" prefWidth="100.0" visible="false">
                         <Label text="Enter Course" translateX="40.0" translateY="20.0">
                             <font>
                                 <Font size="15.0" />
@@ -621,7 +621,7 @@
                                 <Font size="15.0" />
                             </font></Button>
                 </VBox>
-                <VBox fx:id="vboxSwapClassrooms" prefHeight="200.0" prefWidth="100.0">
+                <VBox fx:id="vboxSwapClassrooms" prefHeight="200.0" prefWidth="100.0" visible="false">
                     <Label text="Enter Course" translateX="40.0" translateY="20.0">
                         <font>
                             <Font size="15.0" />

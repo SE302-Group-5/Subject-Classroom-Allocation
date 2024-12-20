@@ -655,7 +655,7 @@ public class MainController {
             courseName = newCourse.getCourseName();
             //    System.err.println("uuuuuuuu");
             db.updateSchedule(classroom, courseName, day, hour, courseDuration);
-
+            showAlert("Success", "Created the course " + courseName + ".\nAssigned " + courseName + "  to classroom " + classroom);
 
             //      System.out.println("Added new course NAME: " + courseName + " classroom: " + classroom + " day: " + courseDay + " coursehour: " + courseHour);
         } else {
@@ -768,6 +768,7 @@ public class MainController {
 
                     AddStudentselectedStudents.add(selectedItem);
                 } else {
+                    showAlert("Error", addStudentClassroom.getClassroomName() + " does not have enough capacity.");
                     System.err.println("    Not enough capcity in " + addStudentClassroom.getClassroomName());
                     System.err.print("  classroom capacity: " + addStudentClassroomCapacity);
                     System.err.print("  Current enrollment " + db.getEnrollmentCount(addStudentCourse.getCourseName()));
@@ -1019,7 +1020,11 @@ public class MainController {
             showAlert("Error", "One or both courses not found.");
             return false;
         }
-
+        if (course1.getStartHour() != course2.getStartHour()) {
+            showAlert("Error", courseName1 + " and " + courseName2 + " do not have the same starting hour.\n"
+                    + courseName1 + ": " + course1.getStartHour() + "\n" + courseName2 + ": " + course2.getStartHour());
+            return false;
+        }
         Classroom classroom1 = db.getClassroom(course1.getClassroom());
         Classroom classroom2 = db.getClassroom(course2.getClassroom());
 
@@ -1038,15 +1043,15 @@ public class MainController {
 
         if (classroom1.getCapacity() >= enrollment2 && classroom2.getCapacity() >= enrollment1) {
             try {
-                changeClassroom(course1.getCourseName(), classroom2.getClassroomName());
-                changeClassroom(course2.getCourseName(), classroom1.getClassroomName());
+                db.changeClassroom(course1.getCourseName(), classroom2.getClassroomName());
+                db.changeClassroom(course2.getCourseName(), classroom1.getClassroomName());
                 return true;
             } catch (RuntimeException e) {
                 System.err.println("Classroom swap failed: " + e.getMessage());
 
                 System.out.println("Reverting changes...");
-                changeClassroom(course1.getCourseName(), classroom1.getClassroomName());
-                changeClassroom(course2.getCourseName(), classroom2.getClassroomName());
+                db.changeClassroom(course1.getCourseName(), classroom1.getClassroomName());
+                db.changeClassroom(course2.getCourseName(), classroom2.getClassroomName());
 
                 showAlert("Error", "Classroom swap failed: " + e.getMessage());
                 return false;
@@ -1056,8 +1061,6 @@ public class MainController {
             return false;
         }
     }
-
-
 
 
     private void showAlert(String title, String message) {
