@@ -42,6 +42,9 @@ public class MainController {
     public GridPane gridpaneAddNewCourseSchedule, gridPaneStudentSchedule, gridPaneClassroomSchedule;
     public ChoiceBox<String> choiceboxAddNewCourseDay, choiceboxAddNewCourseHour;
     public ChoiceBox<Integer> choiceboxAddNewCourseDuration;
+    public Button btnSwapClassrooms;
+    public VBox vboxSwapClassrooms;
+    public Button btnSwapClassroomsConfirm;
     private String courseName, courseLecturer, courseDay, courseHour;
     private int courseDuration;
     private ArrayList<String> courseEnrollment;
@@ -134,6 +137,7 @@ public class MainController {
         vboxList.add(vboxViewClassroomSchedule);
         vboxList.add(vboxViewCourseAttendance);
         vboxList.add(vboxChangeClassroom);
+        vboxList.add(vboxSwapClassrooms);
 
 
         disableAllVboxes();
@@ -924,14 +928,12 @@ public class MainController {
 
     @FXML
     private void handleChangeClassroom() {
-
         clearAllTables();
         disableAllVboxes();
         enableVbox(vboxChangeClassroom);
 
-
-            txtClassroomName.clear();
-            txtCourseName.clear();
+        txtClassroomName.clear();
+        txtCourseName.clear();
 
         btnChangeClassroomConfirm.setOnAction(event -> {
             if (!txtCourseName.getText().isBlank() && !txtClassroomName.getText().isBlank()) {
@@ -941,11 +943,8 @@ public class MainController {
             } else {
                 showAlert("Error", "Please provide both course and classroom names!");
                 return;
-
             }
         });
-
-
     }
 
     public void changeClassroom(String courseName, String classroomName) {
@@ -973,7 +972,6 @@ public class MainController {
 
                 try {
                     db.updateCourseClassroom(courseName, classroomName);
-                    showAlert("Success", "Classroom successfully updated!");
                 } catch (Exception e) {
                     showAlert("Error", "Failed to update the classroom: " + e.getMessage());
                 }
@@ -984,6 +982,82 @@ public class MainController {
             showAlert("Error", "Classroom does not have enough capacity.");
         }
     }
+
+    @FXML
+    private TextField txtCourseName1, txtCourseName2;
+
+    @FXML
+    private void handleSwapClassrooms() {
+        clearAllTables();
+        disableAllVboxes();
+        enableVbox(vboxSwapClassrooms);
+
+        txtCourseName1.clear();
+        txtCourseName2.clear();
+
+        btnSwapClassroomsConfirm.setOnAction(event -> {
+            if (!txtCourseName1.getText().isBlank() && !txtCourseName2.getText().isBlank()) {
+                String courseName1 = txtCourseName1.getText();
+                String courseName2 = txtCourseName2.getText();
+
+                boolean successFlag = swapClassrooms(courseName1, courseName2);
+                if (successFlag) {
+                    showAlert("Success", "Classrooms swapped successfully!");
+                }
+            } else {
+                showAlert("Error", "Please provide both course names!");
+                return;
+            }
+        });
+    }
+
+    public boolean swapClassrooms(String courseName1, String courseName2) {
+        Course course1 = db.getCourse(courseName1);
+        Course course2 = db.getCourse(courseName2);
+
+        if (course1 == null || course2 == null) {
+            showAlert("Error", "One or both courses not found.");
+            return false;
+        }
+
+        Classroom classroom1 = db.getClassroom(course1.getClassroom());
+        Classroom classroom2 = db.getClassroom(course2.getClassroom());
+
+        if (classroom1 == null || classroom2 == null) {
+            showAlert("Error", "One or both classrooms not found.");
+            return false;
+        }
+
+        int enrollment1 = db.getEnrollmentCount(course1.getCourseName());
+        int enrollment2 = db.getEnrollmentCount(course2.getCourseName());
+
+        System.out.println("Enrollment for " + courseName1 + ": " + enrollment1);
+        System.out.println("Enrollment for " + courseName2 + ": " + enrollment2);
+        System.out.println("Capacity for " + classroom1.getClassroomName() + ": " + classroom1.getCapacity());
+        System.out.println("Capacity for " + classroom2.getClassroomName() + ": " + classroom2.getCapacity());
+
+        if (classroom1.getCapacity() >= enrollment2 && classroom2.getCapacity() >= enrollment1) {
+            try {
+                changeClassroom(course1.getCourseName(), classroom2.getClassroomName());
+                changeClassroom(course2.getCourseName(), classroom1.getClassroomName());
+                return true;
+            } catch (RuntimeException e) {
+                System.err.println("Classroom swap failed: " + e.getMessage());
+
+                System.out.println("Reverting changes...");
+                changeClassroom(course1.getCourseName(), classroom1.getClassroomName());
+                changeClassroom(course2.getCourseName(), classroom2.getClassroomName());
+
+                showAlert("Error", "Classroom swap failed: " + e.getMessage());
+                return false;
+            }
+        } else {
+            showAlert("Error", "Classroom capacities do not match course enrollments.");
+            return false;
+        }
+    }
+
+
 
 
     private void showAlert(String title, String message) {
