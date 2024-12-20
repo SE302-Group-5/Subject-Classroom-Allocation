@@ -659,7 +659,7 @@ public class MainController {
 
             //      System.out.println("Added new course NAME: " + courseName + " classroom: " + classroom + " day: " + courseDay + " coursehour: " + courseHour);
         } else {
-            showAlert("Error", "There are no available classroom with enough capacity" + courseName);
+            showAlert("Error", "There are no available classroom with enough capacity for " + courseName);
             //  System.err.println("There are no available classroom with enough capacity");
         }
 
@@ -796,7 +796,7 @@ public class MainController {
                 for (String student : AddStudentselectedStudents) {
                     db.addStudentToCourse(student, addStudentCourse);
                 }
-
+                showAlert("Success","Selected students are added to "+addStudentCourse.getCourseName());
                 addStudent();
             }
 
@@ -941,6 +941,7 @@ public class MainController {
                 String courseName = txtCourseName.getText();
                 String classroomName = txtClassroomName.getText();
                 changeClassroom(courseName, classroomName);
+
             } else {
                 showAlert("Error", "Please provide both course and classroom names!");
                 return;
@@ -973,8 +974,9 @@ public class MainController {
 
                 try {
                     db.updateCourseClassroom(courseName, classroomName);
+                    showAlert("Success","Changed classroom of "+courseName+" to "+classroomName);
                 } catch (Exception e) {
-                    showAlert("Error", "Failed to update the classroom: " + e.getMessage());
+                    showAlert("Error", "Failed to update the classroom " );
                 }
             } else {
                 showAlert("Error", "Classroom is not available at the specified time.");
@@ -1053,7 +1055,7 @@ public class MainController {
                 db.changeClassroom(course1.getCourseName(), classroom1.getClassroomName());
                 db.changeClassroom(course2.getCourseName(), classroom2.getClassroomName());
 
-                showAlert("Error", "Classroom swap failed: " + e.getMessage());
+                showAlert("Error", "Classroom swap failed ");
                 return false;
             }
         } else {

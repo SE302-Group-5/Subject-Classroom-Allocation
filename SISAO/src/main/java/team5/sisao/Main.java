@@ -26,8 +26,10 @@ public class Main extends Application {
             //load the main menu
             Parent root = FXMLLoader.load(location);
             Scene scene = new Scene(root);
-            stage.setMaxHeight(600);
-            stage.setMaxWidth(1000);
+            stage.setMaxHeight(800);
+            stage.setMaxWidth(1100);
+            stage.setMinHeight(800);
+            stage.setMinWidth(1100);
             stage.setScene(scene);
             stage.setTitle("SISAO");
             stage.show();
