@@ -1,5 +1,6 @@
 package team5.sisao;
 
+
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -20,14 +21,12 @@ import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 
+
 import java.awt.*;
 import java.io.File;
+
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -390,8 +389,6 @@ public class MainController {
     }
 
 
-
-
     //sets the table of courses as TableView
     public void setTableViewCourses() {
         // Set up the columns to display data
@@ -547,7 +544,7 @@ public class MainController {
             if (selectedStudents.size() > 0) {
                 addNewCourseSetSchedule();
             } else {
-                showAlert("Error", "Add Students to Course.");
+                showAlert("Error", "Add at least 1 student to Course.");
             }
 
         });
@@ -808,7 +805,9 @@ public class MainController {
                 showAlert("Success", "Selected students are added to " + addStudentCourse.getCourseName());
                 addStudent();
             }
-
+            else{
+                showAlert("Error","Select at least 1 student.");
+            }
 
         });
 
@@ -920,6 +919,9 @@ public class MainController {
 
                 withdrawStudent();
                 showAlert("Success", "Wİthdrawn Students.");
+            }
+            else{
+                showAlert("Error","Select at least 1 student.");
             }
         });
 
@@ -1082,14 +1084,24 @@ public class MainController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     public void ViewHelp() {
 
         clearAllTables();
-//
-//
-//        }
 
-        // Print when the help button is clicked
-        System.out.println("Help button clicked");
+
+        //  File file = new File("/team5/sisao/help.pdf");
+// Wizards at stackoverflow did it again
+        // thank you
+        if (Desktop.isDesktopSupported()) {
+            try {
+                URL url = getClass().getResource("/team5/sisao/help.pdf");
+                File myFile = new File(url.toURI());
+                Desktop.getDesktop().open(myFile);
+            } catch (Exception e) {
+                showAlert("Error", "Can't open the file.");
+
+            }
+        }
     }
 }
