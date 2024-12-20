@@ -9,6 +9,10 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -16,6 +20,14 @@ import javafx.scene.layout.VBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -378,10 +390,7 @@ public class MainController {
     }
 
 
-    public void ViewHelp() {
-        clearAllTables();
-        System.out.println("Help button clicked");
-    }
+
 
     //sets the table of courses as TableView
     public void setTableViewCourses() {
@@ -796,7 +805,7 @@ public class MainController {
                 for (String student : AddStudentselectedStudents) {
                     db.addStudentToCourse(student, addStudentCourse);
                 }
-                showAlert("Success","Selected students are added to "+addStudentCourse.getCourseName());
+                showAlert("Success", "Selected students are added to " + addStudentCourse.getCourseName());
                 addStudent();
             }
 
@@ -974,9 +983,9 @@ public class MainController {
 
                 try {
                     db.updateCourseClassroom(courseName, classroomName);
-                    showAlert("Success","Changed classroom of "+courseName+" to "+classroomName);
+                    showAlert("Success", "Changed classroom of " + courseName + " to " + classroomName);
                 } catch (Exception e) {
-                    showAlert("Error", "Failed to update the classroom " );
+                    showAlert("Error", "Failed to update the classroom ");
                 }
             } else {
                 showAlert("Error", "Classroom is not available at the specified time.");
@@ -1022,7 +1031,16 @@ public class MainController {
             showAlert("Error", "One or both courses not found.");
             return false;
         }
-        if (course1.getStartHour() != course2.getStartHour()) {
+        if (courseName1.equals(courseName2)) {
+            showAlert("Error", "Enter 2 different courses.");
+            return false;
+        }
+
+        if (course1.getDay() != course2.getDay()) {
+            showAlert("Error", courseName1 + " and " + courseName2 + " do not have the same day.\n"
+                    + courseName1 + ": " + course1.getDay() + "\n" + courseName2 + ": " + course2.getDay());
+            return false;
+        } else if (course1.getStartHour() != course2.getStartHour()) {
             showAlert("Error", courseName1 + " and " + courseName2 + " do not have the same starting hour.\n"
                     + courseName1 + ": " + course1.getStartHour() + "\n" + courseName2 + ": " + course2.getStartHour());
             return false;
@@ -1030,31 +1048,23 @@ public class MainController {
         Classroom classroom1 = db.getClassroom(course1.getClassroom());
         Classroom classroom2 = db.getClassroom(course2.getClassroom());
 
-        if (classroom1 == null || classroom2 == null) {
-            showAlert("Error", "One or both classrooms not found.");
-            return false;
-        }
 
         int enrollment1 = db.getEnrollmentCount(course1.getCourseName());
         int enrollment2 = db.getEnrollmentCount(course2.getCourseName());
 
-        System.out.println("Enrollment for " + courseName1 + ": " + enrollment1);
-        System.out.println("Enrollment for " + courseName2 + ": " + enrollment2);
-        System.out.println("Capacity for " + classroom1.getClassroomName() + ": " + classroom1.getCapacity());
-        System.out.println("Capacity for " + classroom2.getClassroomName() + ": " + classroom2.getCapacity());
-
         if (classroom1.getCapacity() >= enrollment2 && classroom2.getCapacity() >= enrollment1) {
             try {
-                db.changeClassroom(course1.getCourseName(), classroom2.getClassroomName());
-                db.changeClassroom(course2.getCourseName(), classroom1.getClassroomName());
-                return true;
+                boolean available = db.swapClassrooms(courseName1, courseName2);
+                //     System.out.println(available+"   "+available+"   "+available);
+                if (available) {
+                    return true;
+                } else {
+                    showAlert("Error", "Courses can not be swapped due to collision");
+                    return false;
+                }
+
             } catch (RuntimeException e) {
                 System.err.println("Classroom swap failed: " + e.getMessage());
-
-                System.out.println("Reverting changes...");
-                db.changeClassroom(course1.getCourseName(), classroom1.getClassroomName());
-                db.changeClassroom(course2.getCourseName(), classroom2.getClassroomName());
-
                 showAlert("Error", "Classroom swap failed ");
                 return false;
             }
@@ -1071,5 +1081,15 @@ public class MainController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    public void ViewHelp() {
+
+        clearAllTables();
+//
+//
+//        }
+
+        // Print when the help button is clicked
+        System.out.println("Help button clicked");
     }
 }

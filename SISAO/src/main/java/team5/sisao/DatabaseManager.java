@@ -266,7 +266,7 @@ public class DatabaseManager {
             course.setCourseName(courseName + "c");
             System.out.println("changed the course name to: " + course.getCourseName());
             createEnrollmentTable(course);
-           // e.printStackTrace();
+            // e.printStackTrace();
             //    throw new RuntimeException();
         }
         String sqlInsert = "INSERT INTO " + courseName + "(student) " +
@@ -284,7 +284,7 @@ public class DatabaseManager {
         } catch (SQLException e) {
 
             System.err.println("Error with enrollment table insertion, table: " + courseName);
-         //   e.printStackTrace();
+            //   e.printStackTrace();
             //    throw new RuntimeException();
         }
 
@@ -450,7 +450,7 @@ public class DatabaseManager {
     public void updateSchedule(String tableName, String course, int day, int startHour, int duration) {
 
         try {
-            if(databaseConnection.isClosed()) {
+            if (databaseConnection.isClosed()) {
                 databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
                 //  System.out.println("it was closed");
             }
@@ -478,6 +478,7 @@ public class DatabaseManager {
 
         } catch (SQLException e) {
             System.err.println("Error with updating the schedule of: " + tableName);
+            e.printStackTrace();
             //    e.printStackTrace();
         }
 
@@ -702,18 +703,18 @@ public class DatabaseManager {
         return unique;
     }
 
-    public void swapClassrooms(String courseName1, String courseName2) {
+    public boolean swapClassrooms(String courseName1, String courseName2) {
         Course course1 = getCourse(courseName1);
         Course course2 = getCourse(courseName2);
         if (course1 == null || course2 == null) {
             System.out.println("Courses not found");
-            return;
+            return false;
         }
         Classroom classroom1 = getClassroom(course1.getClassroom());
         Classroom classroom2 = getClassroom(course2.getClassroom());
         if (classroom1 == null || classroom2 == null) {
             System.out.println("Classrooms not found");
-            return;
+            return false;
         }
         //check if the capacities of to be changed align
         if (classroom1.getCapacity() >= getEnrollmentCount(course2.getCourseName()) && classroom2.getCapacity() >= getEnrollmentCount(course1.getCourseName())) {
@@ -722,26 +723,28 @@ public class DatabaseManager {
             emptyClassroom(course2, classroom2);
             //try to change both courses' classrooms
             try {
-                changeClassroom(course1.getCourseName(), classroom2.getClassroomName());
+                changeClassroom(courseName1, classroom2.getClassroomName(),1);
             } catch (RuntimeException e) {
                 //if change classroom fails, restore original classroom
                 //revert the emptied classrooms
-                changeClassroom(course1.getCourseName(), classroom1.getClassroomName());
+                changeClassroom(courseName1, classroom1.getClassroomName(),-1);
                 System.out.println("Classroom swap failed: " + e.getMessage());
-                return;
+                return false;
             }
             try {
-                changeClassroom(course2.getCourseName(), classroom1.getClassroomName());
+                changeClassroom(courseName2, classroom1.getClassroomName(),1);
                 System.out.println("Classrooms swapped successfully");
+                return true;
             } catch (RuntimeException e) {
                 //if change classroom fails, restore original classrooms
                 //revert the emptied classrooms
-                changeClassroom(course2.getCourseName(), classroom2.getClassroomName());
+                changeClassroom(courseName2, classroom2.getClassroomName(),-1);
                 System.out.println("Classroom swap failed: " + e.getMessage());
-                return;
+                return false;
             }
         } else {
             System.out.println("Classroom capacities do not match course enrollments");
+            return false;
         }
 
     }
@@ -756,7 +759,7 @@ public class DatabaseManager {
         }
     }
 
-    public void changeClassroom(String courseName, String classroomName) {
+    public void changeClassroom(String courseName, String classroomName,int swap) {
         Course course = getCourse(courseName);
         Classroom classroom = getClassroom(classroomName);
 
@@ -771,12 +774,12 @@ public class DatabaseManager {
             int duration = course.getDuration();
 
             if (isAvailable(classroom.getClassroomName(), day, startHour, duration)) {
-                if (course.getClassroom() != null) {
+                if (course.getClassroom() != null && swap<0) {
                     //removing the course from the old classroom's schedule
-                    updateSchedule(course.getClassroom(), "", day, startHour, duration);
+                    updateSchedule(classroomName, "", day, startHour, duration);
                 }
                 //update the classroom's schedule
-                updateSchedule(classroom.getClassroomName(), course.getCourseName(), day, startHour, duration);
+                updateSchedule(classroomName, course.getCourseName(), day, startHour, duration);
                 //update the course's classroom
                 course.setClassroom(classroom.getClassroomName());
                 //UPDATE THE DB RECORD
@@ -842,6 +845,7 @@ public class DatabaseManager {
         }
         return null;
     }
+
     public void addStudentToCourse(String student, Course course) {
         String sqlInsert = "INSERT INTO " + course.getCourseName() + "(student) " +
                 "values (?)";
@@ -867,14 +871,14 @@ public class DatabaseManager {
         try (var conn = databaseConnection;
 
 
-             var pstmt = conn.prepareStatement(sqlDelete)){
+             var pstmt = conn.prepareStatement(sqlDelete)) {
 
             pstmt.setString(1, student);
 
             // execute the delete statement
             pstmt.executeUpdate();
 
-        } catch(SQLException e){
+        } catch (SQLException e) {
             System.err.println("Error with deleting studing from table: " + course);
         }
         updateSchedule(student, "", course.getDay(), course.getStartHour(), course.getDuration());

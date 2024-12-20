@@ -47,6 +47,7 @@ public class Main extends Application {
         DatabaseManager db = new DatabaseManager();
         db.boot();
         System.out.println("DB connection established");
-        launch(args);
+
+           launch(args);
     }
 }
