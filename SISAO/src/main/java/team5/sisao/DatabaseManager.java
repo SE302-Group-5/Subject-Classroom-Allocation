@@ -49,6 +49,15 @@ public class DatabaseManager {
         }
     }
     public void help() throws URISyntaxException, IOException {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         if (Desktop.isDesktopSupported()) {
 
             //    URL url = getClass().getResource("/team5/sisao/help.pdf");
@@ -232,6 +241,14 @@ public class DatabaseManager {
     }
 
     public boolean isAvailable(String name, int day, int startHour, int duration) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean retVal = false;
         StringBuilder query = new StringBuilder("SELECT day FROM " + name + " WHERE day=?");
         for (int i = startHour; i < duration + startHour; i++) {
@@ -261,6 +278,14 @@ public class DatabaseManager {
     }
 
     public void createEnrollmentTable(Course course) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String courseName = course.getCourseName();
         ArrayList<String> attandees = course.getAttandees();
         courseName.replaceAll(" ", "_");
@@ -302,6 +327,14 @@ public class DatabaseManager {
     }
 
     private void createClassroomsTable(ArrayList<Classroom> classrooms) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String createClassroomsTable =
 
                 """
@@ -341,7 +374,14 @@ public class DatabaseManager {
     }
 
     private void createStudentsTable(Object[] students) {
-
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String createStudentsTable =
                 """
                         CREATE TABLE IF NOT EXISTS Students (
@@ -379,7 +419,14 @@ public class DatabaseManager {
     }
 
     private void createCoursesTable(ArrayList<Course> courses) {
-
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String createCoursesTable =
                 """
                         CREATE TABLE IF NOT EXISTS Courses (
@@ -426,6 +473,14 @@ public class DatabaseManager {
     }
 
     public void createScheduleTable(String name, Schedule schedule) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String[][] weeklyProgram = schedule.getWeeklyProgram();
         var sqlTable = "CREATE TABLE IF NOT EXISTS " + name + " ("
                 + "day Text,"
@@ -496,6 +551,14 @@ public class DatabaseManager {
 
 
     public int getEnrollmentCount(String courseName) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         int retVal = 0;
 
         var sql = "SELECT COUNT(*) enrollmentCount FROM " + courseName;
@@ -512,6 +575,14 @@ public class DatabaseManager {
     }
 
     public ArrayList<String> getEnrollment(String courseName) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         ArrayList<String> students = new ArrayList<>();
         var sql = "SELECT student FROM " + courseName;
 
@@ -533,6 +604,14 @@ public class DatabaseManager {
     }
 
     public Schedule getCommonFreeHours(ArrayList<String> students) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Schedule freeHours = new Schedule();
         String studentCompare = students.getFirst();
         if (students.size() == 1) {
@@ -567,6 +646,14 @@ public class DatabaseManager {
     }
 
     public ArrayList<Classroom> getClassrooms() {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         ArrayList<Classroom> classrooms = new ArrayList<>();
         var sql = "SELECT classroomName, capacity FROM Classrooms";
 
@@ -587,6 +674,14 @@ public class DatabaseManager {
     }
 
     public ArrayList<Course> getCourses() {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println("Inside the getCourses method");
         ArrayList<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM Courses";
@@ -621,7 +716,14 @@ public class DatabaseManager {
 
 
     public void addCourse(Course course) {
-
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String sqlInsert = "INSERT INTO Courses" + "(courseName,courseDay,courseTime,duration,lecturer,classroom) " +
                 "values (?,?,?,?,?,?)";
         try {
@@ -646,6 +748,14 @@ public class DatabaseManager {
 
 
     public Schedule getSchedule(String schedule) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Schedule retrievedSchedule = new Schedule();
 
         try {
@@ -670,6 +780,14 @@ public class DatabaseManager {
     }
 
     public List<String> getStudents() {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         List<String> students = new ArrayList<>();
 
         try {
@@ -693,7 +811,14 @@ public class DatabaseManager {
     }
 
     public boolean isCourseNameUnique(String courseName) {
-
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         boolean unique = true;
 
         String st = "SELECT COUNT(*) AS count FROM courses WHERE courseName =" + '"' + courseName + '"';
@@ -714,6 +839,14 @@ public class DatabaseManager {
     }
 
     public boolean swapClassrooms(String courseName1, String courseName2) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Course course1 = getCourse(courseName1);
         Course course2 = getCourse(courseName2);
         if (course1 == null || course2 == null) {
@@ -770,6 +903,14 @@ public class DatabaseManager {
     }
 
     public void changeClassroom(String courseName, String classroomName,int swap) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Course course = getCourse(courseName);
         Classroom classroom = getClassroom(classroomName);
 
@@ -814,6 +955,14 @@ public class DatabaseManager {
 
     public Course getCourse(String courseName) {
         try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
             String sql = "SELECT * FROM Courses WHERE courseName = ?";
             PreparedStatement coursepstmt = databaseConnection.prepareStatement(sql);
             coursepstmt.setString(1, courseName);
@@ -841,6 +990,14 @@ public class DatabaseManager {
 
     public Classroom getClassroom(String classroomName) {
         try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
             String sql = "SELECT * FROM Classrooms WHERE classroomName = ?";
             PreparedStatement classroompstmt = databaseConnection.prepareStatement(sql);
             classroompstmt.setString(1, classroomName);
@@ -857,6 +1014,14 @@ public class DatabaseManager {
     }
 
     public void addStudentToCourse(String student, Course course) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String sqlInsert = "INSERT INTO " + course.getCourseName() + "(student) " +
                 "values (?)";
         try {
@@ -876,6 +1041,14 @@ public class DatabaseManager {
     }
 
     public void withdrawStudentFromCourse(String student, Course course) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String sqlDelete = "DELETE FROM " + course.getCourseName() + " WHERE student=? ";
 
         try (var conn = databaseConnection;
@@ -896,6 +1069,14 @@ public class DatabaseManager {
     }
 
     public void updateCourseClassroom(String courseName, String classroomName) {
+        try {
+            if (databaseConnection.isClosed()) {
+                databaseConnection = DriverManager.getConnection("jdbc:sqlite:sisao.db");
+                //  System.out.println("it was closed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         try {
             String deleteQuery = "UPDATE courses SET classroom = NULL WHERE courseName = ?";
             PreparedStatement deleteStatement = databaseConnection.prepareStatement(deleteQuery);
