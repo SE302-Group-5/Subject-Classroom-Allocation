@@ -1,8 +1,10 @@
 package team5.sisao;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.DriverManager;
@@ -46,7 +48,15 @@ public class DatabaseManager {
             System.err.println("Error with database connection");
         }
     }
+    public void help() throws URISyntaxException, IOException {
+        if (Desktop.isDesktopSupported()) {
 
+            //    URL url = getClass().getResource("/team5/sisao/help.pdf");
+            File myFile = new File("SISAO/help.pdf");
+            Desktop.getDesktop().open(myFile);
+
+        }
+    }
 
     public void boot() {
 

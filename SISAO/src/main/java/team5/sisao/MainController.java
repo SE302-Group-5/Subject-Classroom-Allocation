@@ -804,9 +804,8 @@ public class MainController {
                 }
                 showAlert("Success", "Selected students are added to " + addStudentCourse.getCourseName());
                 addStudent();
-            }
-            else{
-                showAlert("Error","Select at least 1 student.");
+            } else {
+                showAlert("Error", "Select at least 1 student.");
             }
 
         });
@@ -919,9 +918,8 @@ public class MainController {
 
                 withdrawStudent();
                 showAlert("Success", "Wİthdrawn Students.");
-            }
-            else{
-                showAlert("Error","Select at least 1 student.");
+            } else {
+                showAlert("Error", "Select at least 1 student.");
             }
         });
 
@@ -1090,18 +1088,11 @@ public class MainController {
         clearAllTables();
 
 
-        //  File file = new File("/team5/sisao/help.pdf");
-// Wizards at stackoverflow did it again
-        // thank you
-        if (Desktop.isDesktopSupported()) {
-            try {
-                URL url = getClass().getResource("/team5/sisao/help.pdf");
-                File myFile = new File(url.toURI());
-                Desktop.getDesktop().open(myFile);
-            } catch (Exception e) {
-                showAlert("Error", "Can't open the file.");
+        try {
+            db.help();
+        } catch (Exception e) {
+            showAlert("Error", "Can't open the file.");
 
-            }
         }
     }
 }
