@@ -59,7 +59,7 @@ public class DatabaseManager {
             ArrayList<String> CourseCVSlines = new ArrayList<>();
             Set allStudents = new HashSet(); // Using HashSet because it prevents duplicates. This HashSet stores all the students in the school
 
-            File courseFile = new File("SISAO/src/main/resources/team5/sisao/Courses.csv");
+            File courseFile = new File("SISAO/Courses.csv");
 
             FileReader fileReader = null;
             try {
@@ -142,7 +142,7 @@ public class DatabaseManager {
 
 
             ArrayList<String> ClassroomCapacityCVSlines = new ArrayList<>();
-            File classroomFile = new File("SISAO/src/main/resources/team5/sisao/ClassroomCapacity.csv");
+            File classroomFile = new File("SISAO/ClassroomCapacity.csv");
             try {
                 fileReader = new FileReader(classroomFile);
             } catch (FileNotFoundException e) {
