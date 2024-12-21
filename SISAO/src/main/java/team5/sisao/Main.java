@@ -43,7 +43,7 @@ public class Main extends Application {
         return primaryStage;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         DatabaseManager db = new DatabaseManager();
         db.boot();
         System.out.println("DB connection established");
